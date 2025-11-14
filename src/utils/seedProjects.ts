@@ -93,7 +93,7 @@ export async function seedProjects() {
         nombre_obra: 'Reparación Sistema Eléctrico Casa Mendoza',
         cliente_id: clientesData[0].id,
         estado: 'Aprobado',
-        fecha_visita: new Date('2025-01-20T10:00:00').toISOString(),
+        fecha_visita: new Date('2024-11-08T10:00:00').toISOString(),
         imagen_proyecto: imageUrls[0]
       })
       .eq('id', projects[0].id);
@@ -121,7 +121,7 @@ export async function seedProjects() {
         nombre_obra: 'Renovación Completa de Baño Casa González',
         cliente_id: clientesData[1].id,
         estado: 'Aprobado',
-        fecha_visita: new Date('2025-01-25T14:00:00').toISOString(),
+        fecha_visita: new Date('2024-11-15T14:00:00').toISOString(),
         imagen_proyecto: imageUrls[1]
       })
       .eq('id', projects[1].id);
@@ -148,8 +148,8 @@ export async function seedProjects() {
       .update({
         nombre_obra: 'Reparación de Techumbre Casa Silva',
         cliente_id: clientesData[2].id,
-        estado: 'Pendiente',
-        fecha_visita: new Date('2025-02-05T09:00:00').toISOString(),
+        estado: 'Aprobado',
+        fecha_visita: new Date('2024-11-22T09:00:00').toISOString(),
         imagen_proyecto: imageUrls[2]
       })
       .eq('id', projects[2].id);
@@ -169,6 +169,53 @@ export async function seedProjects() {
       { obra_id: projects[2].id, descripcion: 'Estructura de soporte', monto: 195000, proveedor_id: proveedoresData[0].id },
       { obra_id: projects[2].id, descripcion: 'Selladores y fijaciones', monto: 110000, proveedor_id: proveedoresData[0].id }
     ]);
+
+    // Create 2 additional projects for December
+    const { data: decemberProjects } = await supabase
+      .from('obras')
+      .insert([
+        {
+          nombre_obra: 'Instalación Eléctrica Nueva Ampliación',
+          cliente_id: clientesData[0].id,
+          estado: 'Aprobado',
+          fecha_visita: new Date('2024-12-05T11:00:00').toISOString(),
+          imagen_proyecto: imageUrls[0],
+          user_id: user.id
+        },
+        {
+          nombre_obra: 'Mantención Preventiva Sistema de Agua',
+          cliente_id: clientesData[1].id,
+          estado: 'Aprobado',
+          fecha_visita: new Date('2024-12-18T15:00:00').toISOString(),
+          imagen_proyecto: imageUrls[1],
+          user_id: user.id
+        }
+      ])
+      .select('id');
+
+    if (decemberProjects) {
+      // Add budget items for December project 1
+      await supabase.from('items_presupuesto').insert([
+        { obra_id: decemberProjects[0].id, descripcion: 'Cableado para nueva ampliación', precio: 320000 },
+        { obra_id: decemberProjects[0].id, descripcion: 'Instalación de circuitos adicionales', precio: 280000 }
+      ]);
+
+      await supabase.from('gastos').insert([
+        { obra_id: decemberProjects[0].id, descripcion: 'Cables y materiales eléctricos', monto: 165000, proveedor_id: proveedoresData[0].id },
+        { obra_id: decemberProjects[0].id, descripcion: 'Accesorios de instalación', monto: 95000, proveedor_id: proveedoresData[1].id }
+      ]);
+
+      // Add budget items for December project 2
+      await supabase.from('items_presupuesto').insert([
+        { obra_id: decemberProjects[1].id, descripcion: 'Revisión completa del sistema', precio: 180000 },
+        { obra_id: decemberProjects[1].id, descripcion: 'Limpieza y mantención', precio: 220000 }
+      ]);
+
+      await supabase.from('gastos').insert([
+        { obra_id: decemberProjects[1].id, descripcion: 'Productos de limpieza y mantención', monto: 85000, proveedor_id: proveedoresData[2].id },
+        { obra_id: decemberProjects[1].id, descripcion: 'Repuestos y accesorios', monto: 125000, proveedor_id: proveedoresData[1].id }
+      ]);
+    }
 
     console.log('Projects seeded successfully!');
     return true;
