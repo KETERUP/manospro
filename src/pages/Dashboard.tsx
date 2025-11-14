@@ -80,7 +80,13 @@ const Dashboard = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <img src={logoIcon} alt="ManosPro Icon" className="h-20 w-20 object-contain" />
-              <h1 className="text-4xl font-bold text-primary">Manos<span className="text-foreground">Pro</span></h1>
+              <div className="flex flex-col">
+                <h1 className="text-4xl font-bold leading-tight">
+                  <span className="text-[#E89854]">Manos</span>
+                  <span className="text-white">Pro</span>
+                </h1>
+                <div className="h-1 bg-gradient-to-r from-[#E89854] to-transparent rounded-full mt-1"></div>
+              </div>
             </div>
             <div className="flex items-center gap-2">
               <Button
