@@ -83,7 +83,7 @@ const Dashboard = () => {
               <div className="flex flex-col">
                 <h1 className="text-4xl font-bold leading-tight">
                   <span className="text-[#E89854]">Manos</span>
-                  <span className="text-white">Pro</span>
+                  <span className="text-black">Pro</span>
                 </h1>
                 <div className="h-1 bg-gradient-to-r from-[#E89854] to-transparent rounded-full mt-1"></div>
               </div>
