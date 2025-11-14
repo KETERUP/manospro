@@ -11,6 +11,7 @@ import logo from "@/assets/logo-manospro.png";
 import ProjectsList from "@/components/dashboard/ProjectsList";
 import CalendarView from "@/components/dashboard/CalendarView";
 import CreateProjectDialog from "@/components/dashboard/CreateProjectDialog";
+import { seedProjects } from "@/utils/seedProjects";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -21,9 +22,20 @@ const Dashboard = () => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         setUser(session.user);
+        
+        // Check if we need to seed projects (only run once)
+        const seeded = localStorage.getItem('projects_seeded');
+        if (!seeded) {
+          const success = await seedProjects();
+          if (success) {
+            localStorage.setItem('projects_seeded', 'true');
+            toast.success("Proyectos de ejemplo cargados");
+            window.location.reload();
+          }
+        }
       } else {
         navigate("/login");
       }
