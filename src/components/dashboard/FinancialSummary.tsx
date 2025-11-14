@@ -13,7 +13,7 @@ interface FinancialData {
 }
 
 const FinancialSummary = () => {
-  const [selectedMonth, setSelectedMonth] = useState<string>("2024-11");
+  const [selectedMonth, setSelectedMonth] = useState<string>("todos");
   const [financialData, setFinancialData] = useState<FinancialData>({
     ingresosReales: 0,
     ingresosPorIngresar: 0,
@@ -27,12 +27,7 @@ const FinancialSummary = () => {
 
   const fetchFinancialData = async () => {
     try {
-      const [year, month] = selectedMonth.split("-");
-      const startDate = new Date(parseInt(year), parseInt(month) - 1, 1);
-      const endDate = new Date(parseInt(year), parseInt(month), 0);
-
-      // Fetch projects for the selected month
-      const { data: projects, error } = await supabase
+      let query = supabase
         .from("obras")
         .select(`
           id,
@@ -40,9 +35,19 @@ const FinancialSummary = () => {
           total_presupuestado,
           total_gastado,
           created_at
-        `)
-        .gte("created_at", startDate.toISOString())
-        .lte("created_at", endDate.toISOString());
+        `);
+
+      // Only filter by date if not "todos"
+      if (selectedMonth !== "todos") {
+        const [year, month] = selectedMonth.split("-");
+        const startDate = new Date(parseInt(year), parseInt(month) - 1, 1);
+        const endDate = new Date(parseInt(year), parseInt(month), 0);
+        query = query
+          .gte("created_at", startDate.toISOString())
+          .lte("created_at", endDate.toISOString());
+      }
+
+      const { data: projects, error } = await query;
 
       if (error) throw error;
 
@@ -54,11 +59,10 @@ const FinancialSummary = () => {
       projects?.forEach((project) => {
         gastosEfectuados += project.total_gastado;
         
-        if (project.estado === "Terminado") {
+        if (project.estado === "Terminado" || project.estado === "Aprobado") {
           ingresosReales += project.total_presupuestado;
-        } else {
-          ingresosReales += project.total_gastado;
-          ingresosPorIngresar += project.total_presupuestado - project.total_gastado;
+        } else if (project.estado === "Pendiente") {
+          ingresosPorIngresar += project.total_presupuestado;
         }
 
         if (project.estado !== "Terminado") {
@@ -103,9 +107,12 @@ const FinancialSummary = () => {
                 <SelectValue placeholder="Seleccionar mes" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="todos">Todos los meses</SelectItem>
                 <SelectItem value="2024-11">Noviembre 2024</SelectItem>
                 <SelectItem value="2024-12">Diciembre 2024</SelectItem>
                 <SelectItem value="2025-01">Enero 2025</SelectItem>
+                <SelectItem value="2025-02">Febrero 2025</SelectItem>
+                <SelectItem value="2025-03">Marzo 2025</SelectItem>
               </SelectContent>
             </Select>
           </div>
