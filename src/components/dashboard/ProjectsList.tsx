@@ -40,7 +40,7 @@ const ProjectsList = ({ searchQuery, statusFilter }: ProjectsListProps) => {
           estado,
           ganancia_neta,
           imagen_proyecto,
-          cliente:clientes(nombre)
+          cliente:clientes!cliente_id(nombre)
         `)
         .order("created_at", { ascending: false });
 
@@ -48,14 +48,21 @@ const ProjectsList = ({ searchQuery, statusFilter }: ProjectsListProps) => {
         query = query.eq("estado", statusFilter as "Pendiente" | "Aprobado" | "Terminado" | "Rechazado");
       }
 
-      if (searchQuery) {
-        query = query.or(`nombre_obra.ilike.%${searchQuery}%,cliente.nombre.ilike.%${searchQuery}%`);
-      }
-
       const { data, error } = await query;
 
       if (error) throw error;
-      setProjects(data || []);
+      
+      // Filter by search query in JavaScript since complex OR with joins is tricky
+      let filteredData = data || [];
+      if (searchQuery) {
+        const lowerSearch = searchQuery.toLowerCase();
+        filteredData = filteredData.filter(project => 
+          project.nombre_obra.toLowerCase().includes(lowerSearch) ||
+          (project.cliente?.nombre && project.cliente.nombre.toLowerCase().includes(lowerSearch))
+        );
+      }
+      
+      setProjects(filteredData);
     } catch (error) {
       console.error("Error fetching projects:", error);
     } finally {
