@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, Image as ImageIcon } from "lucide-react";
 import CreateClientDialog from "./CreateClientDialog";
 
 interface Client {
@@ -25,6 +25,8 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(false);
   const [showCreateClient, setShowCreateClient] = useState(false);
+  const [imagenProyecto, setImagenProyecto] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   useEffect(() => {
     if (open) {
@@ -46,6 +48,18 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImagenProyecto(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -60,10 +74,31 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user logged in");
 
+      let imagenUrl = null;
+
+      // Upload image if provided
+      if (imagenProyecto) {
+        const fileExt = imagenProyecto.name.split('.').pop();
+        const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError, data } = await supabase.storage
+          .from('proyectos')
+          .upload(fileName, imagenProyecto);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('proyectos')
+          .getPublicUrl(fileName);
+
+        imagenUrl = publicUrl;
+      }
+
       const { error } = await supabase.from("obras").insert({
         nombre_obra: nombreObra,
         cliente_id: clienteId || null,
         user_id: user.id,
+        imagen_proyecto: imagenUrl,
       });
 
       if (error) throw error;
@@ -71,6 +106,8 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
       toast.success("Proyecto creado exitosamente");
       setNombreObra("");
       setClienteId("");
+      setImagenProyecto(null);
+      setImagePreview("");
       onOpenChange(false);
       window.location.reload();
     } catch (error: any) {
@@ -126,6 +163,36 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="imagen">Imagen del Proyecto (opcional)</Label>
+              <div className="flex flex-col gap-3">
+                <Input
+                  id="imagen"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="cursor-pointer"
+                />
+                {imagePreview && (
+                  <div className="relative w-full h-40 rounded-lg overflow-hidden border border-border">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                {!imagePreview && (
+                  <div className="w-full h-40 rounded-lg border-2 border-dashed border-border flex items-center justify-center bg-muted/20">
+                    <div className="text-center">
+                      <ImageIcon className="h-10 w-10 mx-auto text-muted-foreground mb-2" />
+                      <p className="text-sm text-muted-foreground">Vista previa de la imagen</p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             <Button

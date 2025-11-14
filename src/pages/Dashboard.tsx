@@ -118,7 +118,7 @@ const Dashboard = () => {
 
             {/* Status Filters */}
             <div className="flex gap-2 overflow-x-auto pb-2">
-              {["Todos", "Pendiente", "Aprobado", "Terminado"].map((status) => (
+              {["Todos", "Pendiente", "Aprobado", "Terminado", "Rechazado"].map((status) => (
                 <Button
                   key={status}
                   variant={statusFilter === status ? "default" : "outline"}
