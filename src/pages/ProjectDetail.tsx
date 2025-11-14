@@ -100,6 +100,7 @@ const ProjectDetail = () => {
           totalPresupuestado={project.total_presupuestado}
           totalGastado={project.total_gastado}
           gananciaNeta={project.ganancia_neta}
+          estado={project.estado}
         />
 
         {/* Project Info */}
