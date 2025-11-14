@@ -86,7 +86,7 @@ export async function seedProjects() {
 
     if (!proveedoresData) throw new Error('Error creating providers');
 
-    // Update project 1 - Electricista
+    // Update project 1 - Electricista (Noviembre)
     await supabase
       .from('obras')
       .update({
@@ -94,7 +94,8 @@ export async function seedProjects() {
         cliente_id: clientesData[0].id,
         estado: 'Aprobado',
         fecha_visita: new Date('2024-11-08T10:00:00').toISOString(),
-        imagen_proyecto: imageUrls[0]
+        imagen_proyecto: imageUrls[0],
+        created_at: new Date('2024-11-01T10:00:00').toISOString()
       })
       .eq('id', projects[0].id);
 
@@ -114,7 +115,7 @@ export async function seedProjects() {
       { obra_id: projects[0].id, descripcion: 'Herramientas y materiales menores', monto: 85000, proveedor_id: proveedoresData[1].id }
     ]);
 
-    // Update project 2 - Fontanero
+    // Update project 2 - Fontanero (Noviembre)
     await supabase
       .from('obras')
       .update({
@@ -122,7 +123,8 @@ export async function seedProjects() {
         cliente_id: clientesData[1].id,
         estado: 'Aprobado',
         fecha_visita: new Date('2024-11-15T14:00:00').toISOString(),
-        imagen_proyecto: imageUrls[1]
+        imagen_proyecto: imageUrls[1],
+        created_at: new Date('2024-11-03T14:00:00').toISOString()
       })
       .eq('id', projects[1].id);
 
@@ -142,7 +144,7 @@ export async function seedProjects() {
       { obra_id: projects[1].id, descripcion: 'Materiales de instalación', monto: 125000, proveedor_id: proveedoresData[0].id }
     ]);
 
-    // Update project 3 - Techumbre
+    // Update project 3 - Techumbre (Noviembre)
     await supabase
       .from('obras')
       .update({
@@ -150,7 +152,8 @@ export async function seedProjects() {
         cliente_id: clientesData[2].id,
         estado: 'Aprobado',
         fecha_visita: new Date('2024-11-22T09:00:00').toISOString(),
-        imagen_proyecto: imageUrls[2]
+        imagen_proyecto: imageUrls[2],
+        created_at: new Date('2024-11-05T09:00:00').toISOString()
       })
       .eq('id', projects[2].id);
 
@@ -180,7 +183,8 @@ export async function seedProjects() {
           estado: 'Aprobado',
           fecha_visita: new Date('2024-12-05T11:00:00').toISOString(),
           imagen_proyecto: imageUrls[0],
-          user_id: user.id
+          user_id: user.id,
+          created_at: new Date('2024-12-01T11:00:00').toISOString()
         },
         {
           nombre_obra: 'Mantención Preventiva Sistema de Agua',
@@ -188,7 +192,8 @@ export async function seedProjects() {
           estado: 'Aprobado',
           fecha_visita: new Date('2024-12-18T15:00:00').toISOString(),
           imagen_proyecto: imageUrls[1],
-          user_id: user.id
+          user_id: user.id,
+          created_at: new Date('2024-12-03T15:00:00').toISOString()
         }
       ])
       .select('id');
@@ -214,6 +219,35 @@ export async function seedProjects() {
       await supabase.from('gastos').insert([
         { obra_id: decemberProjects[1].id, descripcion: 'Productos de limpieza y mantención', monto: 85000, proveedor_id: proveedoresData[2].id },
         { obra_id: decemberProjects[1].id, descripcion: 'Repuestos y accesorios', monto: 125000, proveedor_id: proveedoresData[1].id }
+      ]);
+    }
+
+    // Create 1 additional project for January
+    const { data: januaryProjects } = await supabase
+      .from('obras')
+      .insert([
+        {
+          nombre_obra: 'Renovación de Instalaciones Casa Rodríguez',
+          cliente_id: clientesData[2].id,
+          estado: 'Pendiente',
+          fecha_visita: new Date('2025-01-15T10:00:00').toISOString(),
+          imagen_proyecto: imageUrls[2],
+          user_id: user.id,
+          created_at: new Date('2025-01-05T10:00:00').toISOString()
+        }
+      ])
+      .select('id');
+
+    if (januaryProjects) {
+      // Add budget items for January project
+      await supabase.from('items_presupuesto').insert([
+        { obra_id: januaryProjects[0].id, descripcion: 'Evaluación y presupuesto', precio: 150000 },
+        { obra_id: januaryProjects[0].id, descripcion: 'Materiales de construcción', precio: 550000 },
+        { obra_id: januaryProjects[0].id, descripcion: 'Mano de obra', precio: 400000 }
+      ]);
+
+      await supabase.from('gastos').insert([
+        { obra_id: januaryProjects[0].id, descripcion: 'Materiales iniciales', monto: 180000, proveedor_id: proveedoresData[0].id }
       ]);
     }
 
