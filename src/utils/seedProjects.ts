@@ -2,11 +2,17 @@ import { supabase } from "@/integrations/supabase/client";
 import proyectoElectricista from "@/assets/proyecto-electricista.jpg";
 import proyectoFontanero from "@/assets/proyecto-fontanero.jpg";
 import proyectoTechumbre from "@/assets/proyecto-techumbre.jpg";
+import proyectoPintor from "@/assets/proyecto-pintor.jpg";
+import proyectoCeramista from "@/assets/proyecto-ceramista.jpg";
+import proyectoCarpintero from "@/assets/proyecto-carpintero.jpg";
 
 const projectImages = [
   { path: proyectoElectricista, name: "electricista" },
   { path: proyectoFontanero, name: "fontanero" },
-  { path: proyectoTechumbre, name: "techumbre" }
+  { path: proyectoTechumbre, name: "techumbre" },
+  { path: proyectoPintor, name: "pintor" },
+  { path: proyectoCeramista, name: "ceramista" },
+  { path: proyectoCarpintero, name: "carpintero" }
 ];
 
 async function uploadImageFromUrl(imageUrl: string, fileName: string, userId: string) {
@@ -178,20 +184,20 @@ export async function seedProjects() {
       .from('obras')
       .insert([
         {
-          nombre_obra: 'Instalación Eléctrica Nueva Ampliación',
+          nombre_obra: 'Pintura Interior Departamento López',
           cliente_id: clientesData[0].id,
           estado: 'Aprobado',
           fecha_visita: new Date('2024-12-05T11:00:00').toISOString(),
-          imagen_proyecto: imageUrls[0],
+          imagen_proyecto: imageUrls[3],
           user_id: user.id,
           created_at: new Date('2024-12-01T11:00:00').toISOString()
         },
         {
-          nombre_obra: 'Mantención Preventiva Sistema de Agua',
+          nombre_obra: 'Instalación de Cerámicas Baño y Cocina',
           cliente_id: clientesData[1].id,
           estado: 'Aprobado',
           fecha_visita: new Date('2024-12-18T15:00:00').toISOString(),
-          imagen_proyecto: imageUrls[1],
+          imagen_proyecto: imageUrls[4],
           user_id: user.id,
           created_at: new Date('2024-12-03T15:00:00').toISOString()
         }
@@ -199,26 +205,28 @@ export async function seedProjects() {
       .select('id');
 
     if (decemberProjects) {
-      // Add budget items for December project 1
+      // Add budget items for December project 1 (Pintor)
       await supabase.from('items_presupuesto').insert([
-        { obra_id: decemberProjects[0].id, descripcion: 'Cableado para nueva ampliación', precio: 320000 },
-        { obra_id: decemberProjects[0].id, descripcion: 'Instalación de circuitos adicionales', precio: 280000 }
+        { obra_id: decemberProjects[0].id, descripcion: 'Preparación de superficies y masillado', precio: 220000 },
+        { obra_id: decemberProjects[0].id, descripcion: 'Pintura de dormitorios y living', precio: 380000 },
+        { obra_id: decemberProjects[0].id, descripcion: 'Pintura de cocina y baños', precio: 180000 }
       ]);
 
       await supabase.from('gastos').insert([
-        { obra_id: decemberProjects[0].id, descripcion: 'Cables y materiales eléctricos', monto: 165000, proveedor_id: proveedoresData[0].id },
-        { obra_id: decemberProjects[0].id, descripcion: 'Accesorios de instalación', monto: 95000, proveedor_id: proveedoresData[1].id }
+        { obra_id: decemberProjects[0].id, descripcion: 'Pintura y materiales', monto: 185000, proveedor_id: proveedoresData[0].id },
+        { obra_id: decemberProjects[0].id, descripcion: 'Masilla y herramientas', monto: 95000, proveedor_id: proveedoresData[1].id }
       ]);
 
-      // Add budget items for December project 2
+      // Add budget items for December project 2 (Ceramista)
       await supabase.from('items_presupuesto').insert([
-        { obra_id: decemberProjects[1].id, descripcion: 'Revisión completa del sistema', precio: 180000 },
-        { obra_id: decemberProjects[1].id, descripcion: 'Limpieza y mantención', precio: 220000 }
+        { obra_id: decemberProjects[1].id, descripcion: 'Cerámicas para baño', precio: 280000 },
+        { obra_id: decemberProjects[1].id, descripcion: 'Cerámicas para cocina', precio: 320000 },
+        { obra_id: decemberProjects[1].id, descripcion: 'Mano de obra instalación', precio: 350000 }
       ]);
 
       await supabase.from('gastos').insert([
-        { obra_id: decemberProjects[1].id, descripcion: 'Productos de limpieza y mantención', monto: 85000, proveedor_id: proveedoresData[2].id },
-        { obra_id: decemberProjects[1].id, descripcion: 'Repuestos y accesorios', monto: 125000, proveedor_id: proveedoresData[1].id }
+        { obra_id: decemberProjects[1].id, descripcion: 'Cerámicas premium', monto: 385000, proveedor_id: proveedoresData[2].id },
+        { obra_id: decemberProjects[1].id, descripcion: 'Adhesivos y fragüe', monto: 125000, proveedor_id: proveedoresData[1].id }
       ]);
     }
 
@@ -227,11 +235,11 @@ export async function seedProjects() {
       .from('obras')
       .insert([
         {
-          nombre_obra: 'Renovación de Instalaciones Casa Rodríguez',
+          nombre_obra: 'Fabricación de Muebles de Cocina Casa Núñez',
           cliente_id: clientesData[2].id,
           estado: 'Pendiente',
           fecha_visita: new Date('2025-01-15T10:00:00').toISOString(),
-          imagen_proyecto: imageUrls[2],
+          imagen_proyecto: imageUrls[5],
           user_id: user.id,
           created_at: new Date('2025-01-05T10:00:00').toISOString()
         }
@@ -239,15 +247,15 @@ export async function seedProjects() {
       .select('id');
 
     if (januaryProjects) {
-      // Add budget items for January project
+      // Add budget items for January project (Carpintero)
       await supabase.from('items_presupuesto').insert([
-        { obra_id: januaryProjects[0].id, descripcion: 'Evaluación y presupuesto', precio: 150000 },
-        { obra_id: januaryProjects[0].id, descripcion: 'Materiales de construcción', precio: 550000 },
-        { obra_id: januaryProjects[0].id, descripcion: 'Mano de obra', precio: 400000 }
+        { obra_id: januaryProjects[0].id, descripcion: 'Diseño y mediciones', precio: 150000 },
+        { obra_id: januaryProjects[0].id, descripcion: 'Materiales de madera', precio: 650000 },
+        { obra_id: januaryProjects[0].id, descripcion: 'Fabricación e instalación', precio: 480000 }
       ]);
 
       await supabase.from('gastos').insert([
-        { obra_id: januaryProjects[0].id, descripcion: 'Materiales iniciales', monto: 180000, proveedor_id: proveedoresData[0].id }
+        { obra_id: januaryProjects[0].id, descripcion: 'Madera y tableros', monto: 280000, proveedor_id: proveedoresData[0].id }
       ]);
     }
 
