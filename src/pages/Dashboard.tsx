@@ -68,20 +68,20 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-dark-bg">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-secondary border-b border-border sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
+      <header className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
+        <div className="container mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img src={logo} alt="MANOS PRO" className="h-10" />
-              <h1 className="text-white font-bold text-lg">MANOS PRO</h1>
+            <div className="flex items-center gap-4">
+              <img src={logo} alt="MANOS PRO" className="h-14 w-14" />
+              <h1 className="text-foreground font-bold text-3xl tracking-tight">MANOS PRO</h1>
             </div>
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:text-primary hover:bg-dark-surface"
+                className="text-muted-foreground hover:text-primary hover:bg-accent"
               >
                 <Settings className="h-5 w-5" />
               </Button>
@@ -89,7 +89,7 @@ const Dashboard = () => {
                 variant="ghost"
                 size="icon"
                 onClick={handleLogout}
-                className="text-white hover:text-primary hover:bg-dark-surface"
+                className="text-muted-foreground hover:text-primary hover:bg-accent"
               >
                 <LogOut className="h-5 w-5" />
               </Button>
@@ -99,47 +99,47 @@ const Dashboard = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-6">
+      <main className="container mx-auto px-6 py-8">
         <Tabs defaultValue="proyectos" className="w-full">
-          <TabsList className="w-full grid grid-cols-2 mb-6 bg-dark-surface">
+          <TabsList className="w-full grid grid-cols-2 mb-8 bg-card shadow-sm h-12">
             <TabsTrigger 
               value="proyectos"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg font-medium"
             >
               Proyectos
             </TabsTrigger>
             <TabsTrigger 
               value="calendario"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg font-medium"
             >
               Calendario
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="proyectos" className="space-y-4">
+          <TabsContent value="proyectos" className="space-y-6">
             {/* Search Bar */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <Input
                 placeholder="Buscar proyecto por nombre..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-white border-border"
+                className="pl-12 h-12 bg-card border-border shadow-sm text-base rounded-xl"
               />
             </div>
 
             {/* Status Filters */}
-            <div className="flex gap-2 overflow-x-auto pb-2">
+            <div className="flex gap-3 overflow-x-auto pb-2">
               {["Todos", "Pendiente", "Aprobado", "Terminado", "Rechazado"].map((status) => (
                 <Button
                   key={status}
                   variant={statusFilter === status ? "default" : "outline"}
-                  size="sm"
+                  size="default"
                   onClick={() => setStatusFilter(status)}
                   className={
                     statusFilter === status
-                      ? "bg-primary text-white hover:bg-primary-hover"
-                      : "bg-muted text-foreground hover:bg-muted/80 border-border"
+                      ? "bg-primary text-white hover:bg-primary-hover rounded-full font-medium shadow-sm"
+                      : "bg-card text-foreground hover:bg-accent hover:text-accent-foreground border-border rounded-full font-medium"
                   }
                 >
                   {status}
@@ -163,7 +163,7 @@ const Dashboard = () => {
       {/* Floating Action Button */}
       <Button
         onClick={() => setShowCreateDialog(true)}
-        className="fixed bottom-6 right-6 h-16 w-16 rounded-full bg-primary hover:bg-primary-hover text-white shadow-2xl hover:shadow-primary/50 transition-all duration-200"
+        className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-primary hover:bg-primary-hover text-white shadow-xl hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 hover:scale-110"
         size="icon"
       >
         <Plus className="h-8 w-8" />
