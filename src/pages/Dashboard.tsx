@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LogOut, Plus, Search, Settings } from "lucide-react";
 import { toast } from "sonner";
 import logo from "@/assets/logo-manospro-header.png";
+import loadingImage from "@/assets/loading-manospro.png";
 import ProjectsList from "@/components/dashboard/ProjectsList";
 import CalendarView from "@/components/dashboard/CalendarView";
 import FinancialSummary from "@/components/dashboard/FinancialSummary";
@@ -62,8 +63,10 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-dark-bg flex items-center justify-center">
-        <div className="text-white">Cargando...</div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4 animate-pulse">
+          <img src={loadingImage} alt="Cargando..." className="w-80 h-80 object-contain" />
+        </div>
       </div>
     );
   }
