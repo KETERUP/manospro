@@ -49,7 +49,7 @@ const ProjectsList = ({ searchQuery, statusFilter }: ProjectsListProps) => {
       }
 
       if (searchQuery) {
-        query = query.ilike("nombre_obra", `%${searchQuery}%`);
+        query = query.or(`nombre_obra.ilike.%${searchQuery}%,cliente.nombre.ilike.%${searchQuery}%`);
       }
 
       const { data, error } = await query;

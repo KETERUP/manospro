@@ -138,7 +138,7 @@ const Dashboard = () => {
             <div className="relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <Input
-                placeholder="Buscar proyecto por nombre..."
+                placeholder="Buscar proyectos o clientes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-12 h-12 bg-card border-border shadow-sm text-base rounded-xl"
