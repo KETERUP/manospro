@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import logo from "@/assets/logo-manospro.png";
 import ProjectsList from "@/components/dashboard/ProjectsList";
 import CalendarView from "@/components/dashboard/CalendarView";
+import FinancialSummary from "@/components/dashboard/FinancialSummary";
 import CreateProjectDialog from "@/components/dashboard/CreateProjectDialog";
 import { seedProjects } from "@/utils/seedProjects";
 
@@ -27,11 +28,11 @@ const Dashboard = () => {
         setUser(session.user);
         
         // Check if we need to seed projects (only run once)
-        const seeded = localStorage.getItem('projects_seeded_v2');
+        const seeded = localStorage.getItem('projects_seeded_v3');
         if (!seeded) {
           const success = await seedProjects();
           if (success) {
-            localStorage.setItem('projects_seeded_v2', 'true');
+            localStorage.setItem('projects_seeded_v3', 'true');
             toast.success("Proyectos de ejemplo cargados");
             window.location.reload();
           }
@@ -101,7 +102,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="container mx-auto px-6 py-8">
         <Tabs defaultValue="proyectos" className="w-full">
-          <TabsList className="w-full grid grid-cols-2 mb-8 bg-card shadow-sm h-12">
+          <TabsList className="w-full grid grid-cols-3 mb-8 bg-card shadow-sm h-12">
             <TabsTrigger 
               value="proyectos"
               className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg font-medium"
@@ -113,6 +114,12 @@ const Dashboard = () => {
               className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg font-medium"
             >
               Calendario
+            </TabsTrigger>
+            <TabsTrigger 
+              value="financiero"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg font-medium"
+            >
+              Resumen Financiero
             </TabsTrigger>
           </TabsList>
 
@@ -156,6 +163,10 @@ const Dashboard = () => {
 
           <TabsContent value="calendario">
             <CalendarView />
+          </TabsContent>
+
+          <TabsContent value="financiero">
+            <FinancialSummary />
           </TabsContent>
         </Tabs>
       </main>
