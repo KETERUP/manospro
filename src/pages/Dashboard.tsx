@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LogOut, Plus, Search, Settings } from "lucide-react";
 import { toast } from "sonner";
-import logo from "@/assets/logo-manospro.png";
+import logo from "@/assets/logo-manospro-header.png";
 import ProjectsList from "@/components/dashboard/ProjectsList";
 import CalendarView from "@/components/dashboard/CalendarView";
 import FinancialSummary from "@/components/dashboard/FinancialSummary";
@@ -74,9 +74,8 @@ const Dashboard = () => {
       <header className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <img src={logo} alt="MANOS PRO" className="h-14 w-14" />
-              <h1 className="text-foreground font-bold text-3xl tracking-tight">MANOS PRO</h1>
+            <div className="flex items-center">
+              <img src={logo} alt="MANOS PRO" className="h-16" />
             </div>
             <div className="flex items-center gap-2">
               <Button
