@@ -129,6 +129,7 @@ export type Database = {
           fecha_visita: string | null
           ganancia_neta: number | null
           id: string
+          imagen_proyecto: string | null
           nombre_obra: string
           total_gastado: number
           total_presupuestado: number
@@ -142,6 +143,7 @@ export type Database = {
           fecha_visita?: string | null
           ganancia_neta?: number | null
           id?: string
+          imagen_proyecto?: string | null
           nombre_obra: string
           total_gastado?: number
           total_presupuestado?: number
@@ -155,6 +157,7 @@ export type Database = {
           fecha_visita?: string | null
           ganancia_neta?: number | null
           id?: string
+          imagen_proyecto?: string | null
           nombre_obra?: string
           total_gastado?: number
           total_presupuestado?: number

@@ -22,7 +22,7 @@ const ProjectInfo = ({ cliente, estado, fechaVisita, projectId, onUpdate }: Proj
     try {
       const { error } = await supabase
         .from("obras")
-        .update({ estado: newEstado as "Pendiente" | "Aprobado" | "Terminado" })
+        .update({ estado: newEstado as "Pendiente" | "Aprobado" | "Terminado" | "Rechazado" })
         .eq("id", projectId);
 
       if (error) throw error;
@@ -60,6 +60,7 @@ const ProjectInfo = ({ cliente, estado, fechaVisita, projectId, onUpdate }: Proj
               <SelectItem value="Pendiente">Pendiente</SelectItem>
               <SelectItem value="Aprobado">Aprobado</SelectItem>
               <SelectItem value="Terminado">Terminado</SelectItem>
+              <SelectItem value="Rechazado">Rechazado</SelectItem>
             </SelectContent>
           </Select>
         </div>
