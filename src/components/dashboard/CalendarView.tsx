@@ -72,8 +72,8 @@ const CalendarView = () => {
             }}
             modifiersStyles={{
               hasEvent: {
-                backgroundColor: "hsl(var(--primary))",
-                color: "white",
+                border: "2px solid #ef4444",
+                borderRadius: "6px",
                 fontWeight: "bold",
               },
             }}

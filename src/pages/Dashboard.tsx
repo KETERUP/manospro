@@ -27,11 +27,11 @@ const Dashboard = () => {
         setUser(session.user);
         
         // Check if we need to seed projects (only run once)
-        const seeded = localStorage.getItem('projects_seeded');
+        const seeded = localStorage.getItem('projects_seeded_v2');
         if (!seeded) {
           const success = await seedProjects();
           if (success) {
-            localStorage.setItem('projects_seeded', 'true');
+            localStorage.setItem('projects_seeded_v2', 'true');
             toast.success("Proyectos de ejemplo cargados");
             window.location.reload();
           }
