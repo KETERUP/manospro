@@ -10,7 +10,7 @@ import { Loader2 } from "lucide-react";
 interface CreateClientDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSuccess: () => void;
+  onSuccess?: () => void;
 }
 
 const CreateClientDialog = ({ open, onOpenChange, onSuccess }: CreateClientDialogProps) => {
@@ -37,7 +37,6 @@ const CreateClientDialog = ({ open, onOpenChange, onSuccess }: CreateClientDialo
         nombre,
         telefono: telefono || null,
         email: email || null,
-        user_id: user.id,
       });
 
       if (error) throw error;
@@ -47,7 +46,7 @@ const CreateClientDialog = ({ open, onOpenChange, onSuccess }: CreateClientDialo
       setTelefono("");
       setEmail("");
       onOpenChange(false);
-      onSuccess();
+      if (onSuccess) onSuccess();
     } catch (error: any) {
       toast.error(error.message || "Error al crear el cliente");
     } finally {

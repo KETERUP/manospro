@@ -14,6 +14,8 @@ import ProjectsList from "@/components/dashboard/ProjectsList";
 import CalendarView from "@/components/dashboard/CalendarView";
 import FinancialSummary from "@/components/dashboard/FinancialSummary";
 import CreateProjectDialog from "@/components/dashboard/CreateProjectDialog";
+import CreateClientDialog from "@/components/dashboard/CreateClientDialog";
+import ClientsList from "@/components/dashboard/ClientsList";
 import { seedProjects } from "@/utils/seedProjects";
 
 const Dashboard = () => {
@@ -23,6 +25,9 @@ const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("Todos");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [showCreateClientDialog, setShowCreateClientDialog] = useState(false);
+  const [refreshClients, setRefreshClients] = useState(0);
+  const [activeTab, setActiveTab] = useState("proyectos");
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
@@ -111,13 +116,19 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-8">
-        <Tabs defaultValue="proyectos" className="w-full">
-          <TabsList className="w-full grid grid-cols-3 mb-8 bg-card shadow-sm h-12">
+        <Tabs defaultValue="proyectos" className="w-full" onValueChange={setActiveTab}>
+          <TabsList className="w-full grid grid-cols-4 mb-8 bg-card shadow-sm h-12">
             <TabsTrigger 
               value="proyectos"
               className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg font-medium"
             >
               Proyectos
+            </TabsTrigger>
+            <TabsTrigger 
+              value="clientes"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg font-medium"
+            >
+              Clientes
             </TabsTrigger>
             <TabsTrigger 
               value="calendario"
@@ -178,6 +189,22 @@ const Dashboard = () => {
             />
           </TabsContent>
 
+          <TabsContent value="clientes" className="space-y-6">
+            {/* Search Bar */}
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+              <Input
+                placeholder="Buscar clientes por nombre, email o teléfono..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-12 h-12 bg-card border-border shadow-sm text-base rounded-xl"
+              />
+            </div>
+
+            {/* Clients List */}
+            <ClientsList searchQuery={searchQuery} key={refreshClients} />
+          </TabsContent>
+
           <TabsContent value="calendario">
             <CalendarView />
           </TabsContent>
@@ -190,7 +217,13 @@ const Dashboard = () => {
 
       {/* Floating Action Button */}
       <Button
-        onClick={() => setShowCreateDialog(true)}
+        onClick={() => {
+          if (activeTab === "clientes") {
+            setShowCreateClientDialog(true);
+          } else {
+            setShowCreateDialog(true);
+          }
+        }}
         className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-primary hover:bg-primary-hover text-white shadow-xl hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 hover:scale-110"
         size="icon"
       >
@@ -200,6 +233,12 @@ const Dashboard = () => {
       <CreateProjectDialog 
         open={showCreateDialog}
         onOpenChange={setShowCreateDialog}
+      />
+      
+      <CreateClientDialog 
+        open={showCreateClientDialog}
+        onOpenChange={setShowCreateClientDialog}
+        onSuccess={() => setRefreshClients(prev => prev + 1)}
       />
     </div>
   );
