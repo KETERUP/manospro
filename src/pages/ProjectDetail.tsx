@@ -60,8 +60,8 @@ const ProjectDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-dark-bg flex items-center justify-center">
-        <div className="text-white">Cargando...</div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-foreground">Cargando...</div>
       </div>
     );
   }
@@ -71,9 +71,9 @@ const ProjectDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-dark-bg">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-secondary border-b border-border sticky top-0 z-50">
+      <header className="bg-card border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -81,11 +81,11 @@ const ProjectDetail = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate("/dashboard")}
-                className="text-primary hover:bg-dark-surface"
+                className="text-primary hover:bg-accent"
               >
                 <ArrowLeft className="h-6 w-6" />
               </Button>
-              <h1 className="text-white font-bold text-lg line-clamp-1">
+              <h1 className="text-foreground font-bold text-lg line-clamp-1">
                 {project.nombre_obra}
               </h1>
             </div>

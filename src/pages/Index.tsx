@@ -16,10 +16,10 @@ const Index = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-bg via-dark-surface to-secondary flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="max-w-2xl w-full text-center">
         <img src={logo} alt="MANOS PRO" className="h-48 mx-auto mb-8" />
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
           MANOS PRO
         </h1>
         <p className="text-xl text-muted-foreground mb-8">

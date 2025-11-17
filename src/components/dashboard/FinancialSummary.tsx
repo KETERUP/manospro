@@ -58,9 +58,9 @@ const FinancialSummary = () => {
 
       projects?.forEach((project) => {
         // Los ingresos son el total presupuestado (lo que se cobrará al cliente)
-        if (project.estado === "Terminado" || project.estado === "Aprobado") {
+        if (project.estado === "TERMINADO" || project.estado === "APROBADO") {
           ingresosReales += project.total_presupuestado;
-        } else if (project.estado === "Pendiente") {
+        } else if (project.estado === "PENDIENTE") {
           ingresosPorIngresar += project.total_presupuestado;
         }
 
@@ -69,10 +69,10 @@ const FinancialSummary = () => {
         
         // Gastos por venir: estimamos que los gastos futuros serán proporcionales
         // Para proyectos no terminados, estimamos un 10-20% adicional de gastos
-        if (project.estado === "Pendiente") {
+        if (project.estado === "PENDIENTE") {
           // Estimamos que falta gastar aproximadamente 20% más de lo ya gastado
           gastosPorVenir += project.total_gastado * 0.2;
-        } else if (project.estado === "Aprobado") {
+        } else if (project.estado === "APROBADO") {
           // Estimamos que falta gastar aproximadamente 10% más de lo ya gastado
           gastosPorVenir += project.total_gastado * 0.1;
         }

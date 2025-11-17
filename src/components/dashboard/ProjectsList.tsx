@@ -45,7 +45,7 @@ const ProjectsList = ({ searchQuery, statusFilter }: ProjectsListProps) => {
         .order("created_at", { ascending: false });
 
       if (statusFilter !== "Todos") {
-        query = query.eq("estado", statusFilter as "Pendiente" | "Aprobado" | "Terminado" | "Rechazado");
+        query = query.eq("estado", statusFilter as "PENDIENTE" | "APROBADO" | "TERMINADO" | "RECHAZADO" | "EN_PROGRESO");
       }
 
       const { data, error } = await query;
@@ -72,16 +72,35 @@ const ProjectsList = ({ searchQuery, statusFilter }: ProjectsListProps) => {
 
   const getStatusColor = (estado: string) => {
     switch (estado) {
-      case "Pendiente":
+      case "PENDIENTE":
         return "bg-warning/20 text-warning border-warning/30";
-      case "Aprobado":
+      case "APROBADO":
         return "bg-success/20 text-success border-success/30";
-      case "Terminado":
+      case "EN_PROGRESO":
+        return "bg-info/20 text-info border-info/30";
+      case "TERMINADO":
         return "bg-muted text-muted-foreground border-border";
-      case "Rechazado":
+      case "RECHAZADO":
         return "bg-destructive/20 text-destructive border-destructive/30";
       default:
         return "bg-muted text-muted-foreground border-border";
+    }
+  };
+
+  const getStatusLabel = (estado: string) => {
+    switch (estado) {
+      case "PENDIENTE":
+        return "Pendiente";
+      case "APROBADO":
+        return "Aprobado";
+      case "EN_PROGRESO":
+        return "En Progreso";
+      case "TERMINADO":
+        return "Terminado";
+      case "RECHAZADO":
+        return "Rechazado";
+      default:
+        return estado;
     }
   };
 
@@ -129,7 +148,7 @@ const ProjectsList = ({ searchQuery, statusFilter }: ProjectsListProps) => {
             )}
             <div className="absolute top-3 right-3">
               <Badge className={`${getStatusColor(project.estado)} shadow-lg`}>
-                {project.estado}
+                {getStatusLabel(project.estado)}
               </Badge>
             </div>
           </div>

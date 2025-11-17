@@ -22,7 +22,7 @@ const ProjectInfo = ({ cliente, estado, fechaVisita, projectId, onUpdate }: Proj
     try {
       const { error } = await supabase
         .from("obras")
-        .update({ estado: newEstado as "Pendiente" | "Aprobado" | "Terminado" | "Rechazado" })
+        .update({ estado: newEstado as "PENDIENTE" | "APROBADO" | "TERMINADO" | "RECHAZADO" | "EN_PROGRESO" })
         .eq("id", projectId);
 
       if (error) throw error;
@@ -57,10 +57,11 @@ const ProjectInfo = ({ cliente, estado, fechaVisita, projectId, onUpdate }: Proj
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Pendiente">Pendiente</SelectItem>
-              <SelectItem value="Aprobado">Aprobado</SelectItem>
-              <SelectItem value="Terminado">Terminado</SelectItem>
-              <SelectItem value="Rechazado">Rechazado</SelectItem>
+              <SelectItem value="PENDIENTE">Pendiente</SelectItem>
+              <SelectItem value="APROBADO">Aprobado</SelectItem>
+              <SelectItem value="EN_PROGRESO">En Progreso</SelectItem>
+              <SelectItem value="TERMINADO">Terminado</SelectItem>
+              <SelectItem value="RECHAZADO">Rechazado</SelectItem>
             </SelectContent>
           </Select>
         </div>
