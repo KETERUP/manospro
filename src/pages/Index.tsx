@@ -35,7 +35,7 @@ const Index = () => {
             Ingresar
           </Button>
           <Button
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/register-multistep")}
             size="lg"
             variant="outline"
             className="border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold px-8 py-6 text-lg rounded-xl transition-all duration-200"

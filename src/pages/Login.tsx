@@ -104,7 +104,7 @@ const Login = () => {
             <div className="text-muted-foreground">
               ¿No tienes cuenta?{" "}
               <Link 
-                to="/register" 
+                to="/register-multistep" 
                 className="text-primary font-semibold hover:underline"
               >
                 Regístrate aquí
