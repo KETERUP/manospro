@@ -34,7 +34,7 @@ const CalendarView = () => {
       const { data, error } = await supabase
         .from("obras")
         .select("id, nombre_obra, fecha_visita")
-        .eq("estado", "Aprobado")
+        .eq("estado", "APROBADO")
         .not("fecha_visita", "is", null)
         .order("fecha_visita", { ascending: true });
 
@@ -108,7 +108,7 @@ const CalendarView = () => {
                     {event.nombre_obra}
                   </h4>
                   <Badge className="bg-primary/20 text-primary border-primary/30">
-                    Aprobado
+                    APROBADO
                   </Badge>
                 </div>
               </CardContent>

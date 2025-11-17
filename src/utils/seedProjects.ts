@@ -98,7 +98,7 @@ export async function seedProjects() {
       .update({
         nombre_obra: 'Reparación Sistema Eléctrico Casa Mendoza',
         cliente_id: clientesData[0].id,
-        estado: 'Aprobado',
+        estado: 'APROBADO',
         fecha_visita: new Date('2024-11-08T10:00:00').toISOString(),
         imagen_proyecto: imageUrls[0],
         created_at: new Date('2024-11-01T10:00:00').toISOString()
@@ -127,7 +127,7 @@ export async function seedProjects() {
       .update({
         nombre_obra: 'Renovación Completa de Baño Casa González',
         cliente_id: clientesData[1].id,
-        estado: 'Aprobado',
+        estado: 'APROBADO',
         fecha_visita: new Date('2024-11-15T14:00:00').toISOString(),
         imagen_proyecto: imageUrls[1],
         created_at: new Date('2024-11-03T14:00:00').toISOString()
@@ -156,7 +156,7 @@ export async function seedProjects() {
       .update({
         nombre_obra: 'Reparación de Techumbre Casa Silva',
         cliente_id: clientesData[2].id,
-        estado: 'Aprobado',
+        estado: 'APROBADO',
         fecha_visita: new Date('2024-11-22T09:00:00').toISOString(),
         imagen_proyecto: imageUrls[2],
         created_at: new Date('2024-11-05T09:00:00').toISOString()
@@ -186,7 +186,7 @@ export async function seedProjects() {
         {
           nombre_obra: 'Pintura Interior Departamento López',
           cliente_id: clientesData[0].id,
-          estado: 'Aprobado',
+          estado: 'APROBADO',
           fecha_visita: new Date('2024-12-05T11:00:00').toISOString(),
           imagen_proyecto: imageUrls[3],
           user_id: user.id,
@@ -195,7 +195,7 @@ export async function seedProjects() {
         {
           nombre_obra: 'Instalación de Cerámicas Baño y Cocina',
           cliente_id: clientesData[1].id,
-          estado: 'Aprobado',
+          estado: 'APROBADO',
           fecha_visita: new Date('2024-12-18T15:00:00').toISOString(),
           imagen_proyecto: imageUrls[4],
           user_id: user.id,
@@ -237,7 +237,7 @@ export async function seedProjects() {
         {
           nombre_obra: 'Fabricación de Muebles de Cocina Casa Núñez',
           cliente_id: clientesData[2].id,
-          estado: 'Pendiente',
+          estado: 'PENDIENTE',
           fecha_visita: new Date('2025-01-15T10:00:00').toISOString(),
           imagen_proyecto: imageUrls[5],
           user_id: user.id,

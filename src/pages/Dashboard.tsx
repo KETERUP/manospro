@@ -147,19 +147,26 @@ const Dashboard = () => {
 
             {/* Status Filters */}
             <div className="flex gap-3 overflow-x-auto pb-2">
-              {["Todos", "Pendiente", "Aprobado", "Terminado", "Rechazado"].map((status) => (
+              {[
+                { value: "Todos", label: "Todos" },
+                { value: "PENDIENTE", label: "Pendiente" },
+                { value: "APROBADO", label: "Aprobado" },
+                { value: "EN_PROGRESO", label: "En Progreso" },
+                { value: "TERMINADO", label: "Terminado" },
+                { value: "RECHAZADO", label: "Rechazado" }
+              ].map((status) => (
                 <Button
-                  key={status}
-                  variant={statusFilter === status ? "default" : "outline"}
+                  key={status.value}
+                  variant={statusFilter === status.value ? "default" : "outline"}
                   size="default"
-                  onClick={() => setStatusFilter(status)}
+                  onClick={() => setStatusFilter(status.value)}
                   className={
-                    statusFilter === status
+                    statusFilter === status.value
                       ? "bg-primary text-white hover:bg-primary-hover rounded-full font-medium shadow-sm"
                       : "bg-card text-foreground hover:bg-accent hover:text-accent-foreground border-border rounded-full font-medium"
                   }
                 >
-                  {status}
+                  {status.label}
                 </Button>
               ))}
             </div>
