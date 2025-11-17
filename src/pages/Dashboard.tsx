@@ -82,10 +82,10 @@ const Dashboard = () => {
               <img src={logoIcon} alt="ManosPro Icon" className="h-20 w-20 object-contain" />
               <div className="flex flex-col">
                 <h1 className="text-4xl font-bold leading-tight">
-                  <span className="text-[#E89854]">Manos</span>
-                  <span className="text-black">Pro</span>
+                  <span className="text-primary">Manos</span>
+                  <span className="text-foreground">Pro</span>
                 </h1>
-                <div className="h-1 bg-gradient-to-r from-[#E89854] to-transparent rounded-full mt-1"></div>
+                <div className="h-1 bg-gradient-to-r from-primary to-transparent rounded-full mt-1"></div>
               </div>
             </div>
             <div className="flex items-center gap-2">
