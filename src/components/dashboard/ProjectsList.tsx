@@ -11,7 +11,7 @@ interface Project {
   estado: string;
   ganancia_neta: number;
   imagen_proyecto: string | null;
-  cliente: {
+  clientes: {
     nombre: string;
   } | null;
 }
@@ -40,7 +40,8 @@ const ProjectsList = ({ searchQuery, statusFilter }: ProjectsListProps) => {
           estado,
           ganancia_neta,
           imagen_proyecto,
-          cliente:clientes!cliente_id(nombre)
+          cliente_id,
+          clientes!obras_cliente_id_fkey(nombre)
         `)
         .order("created_at", { ascending: false });
 
@@ -58,7 +59,7 @@ const ProjectsList = ({ searchQuery, statusFilter }: ProjectsListProps) => {
         const lowerSearch = searchQuery.toLowerCase();
         filteredData = filteredData.filter(project => 
           project.nombre_obra.toLowerCase().includes(lowerSearch) ||
-          (project.cliente?.nombre && project.cliente.nombre.toLowerCase().includes(lowerSearch))
+          (project.clientes?.nombre && project.clientes.nombre.toLowerCase().includes(lowerSearch))
         );
       }
       
@@ -161,7 +162,7 @@ const ProjectsList = ({ searchQuery, statusFilter }: ProjectsListProps) => {
             </div>
             
             <p className="text-xs text-muted-foreground mb-2 line-clamp-1">
-              {project.cliente?.nombre || "Sin cliente"}
+              {project.clientes?.nombre || "Sin cliente"}
             </p>
             
             <div className="flex items-baseline gap-2 pt-2 border-t border-border">
