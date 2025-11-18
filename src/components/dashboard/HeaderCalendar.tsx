@@ -2,9 +2,38 @@ import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, Calendar as CalendarIcon } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { es } from "date-fns/locale";
 import { toast } from "sonner";
+
+const ColorfulCalendarIcon = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className="flex-shrink-0"
+  >
+    {/* Anillos superiores */}
+    <circle cx="7" cy="4" r="1.5" fill="#ef4444" />
+    <circle cx="12" cy="4" r="1.5" fill="#ef4444" />
+    <circle cx="17" cy="4" r="1.5" fill="#ef4444" />
+    
+    {/* Cuerpo del calendario */}
+    <rect x="4" y="6" width="16" height="15" rx="2" fill="white" stroke="#e5e7eb" strokeWidth="1.5" />
+    
+    {/* Encabezado rojo */}
+    <rect x="4" y="6" width="16" height="4" rx="2" fill="#ef4444" />
+    <rect x="4" y="8" width="16" height="2" fill="#ef4444" />
+    
+    {/* Texto DIC */}
+    <text x="12" y="9" fontSize="3" fill="white" fontWeight="bold" textAnchor="middle">DIC</text>
+    
+    {/* Número del día */}
+    <text x="12" y="17" fontSize="8" fill="#ef4444" fontWeight="bold" textAnchor="middle">18</text>
+  </svg>
+);
 
 // Datos de ejemplo de reuniones para noviembre 2025
 const meetingsData = [
@@ -62,7 +91,7 @@ const HeaderCalendar = () => {
         onClick={() => setIsExpanded(!isExpanded)}
         className="flex items-center gap-2"
       >
-        <CalendarIcon className="h-5 w-5" />
+        <ColorfulCalendarIcon />
         <span className="font-medium">Calendario</span>
         {isExpanded ? (
           <ChevronUp className="h-4 w-4" />
