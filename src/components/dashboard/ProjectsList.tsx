@@ -127,14 +127,14 @@ const ProjectsList = ({ searchQuery, statusFilter }: ProjectsListProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
       {projects.map((project) => (
         <Card
           key={project.id}
           className="group cursor-pointer overflow-hidden border-none shadow-md hover:shadow-xl transition-all duration-300 bg-background"
           onClick={() => navigate(`/project/${project.id}`)}
         >
-          <div className="relative h-64 w-full overflow-hidden bg-muted">
+          <div className="relative h-40 w-full overflow-hidden bg-muted">
             {project.imagen_proyecto ? (
               <img
                 src={project.imagen_proyecto}
@@ -143,31 +143,31 @@ const ProjectsList = ({ searchQuery, statusFilter }: ProjectsListProps) => {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted to-muted/50">
-                <Building2 className="h-20 w-20 text-muted-foreground/30" />
+                <Building2 className="h-12 w-12 text-muted-foreground/30" />
               </div>
             )}
-            <div className="absolute top-3 right-3">
-              <Badge className={`${getStatusColor(project.estado)} shadow-lg`}>
+            <div className="absolute top-2 right-2">
+              <Badge className={`${getStatusColor(project.estado)} shadow-lg text-xs px-2 py-0.5`}>
                 {getStatusLabel(project.estado)}
               </Badge>
             </div>
           </div>
           
-          <div className="p-4">
-            <div className="flex items-start justify-between gap-2 mb-2">
-              <h3 className="font-semibold text-foreground text-base line-clamp-2 flex-1">
+          <div className="p-3">
+            <div className="flex items-start justify-between gap-2 mb-1.5">
+              <h3 className="font-semibold text-foreground text-sm line-clamp-2 flex-1">
                 {project.nombre_obra}
               </h3>
             </div>
             
-            <p className="text-sm text-muted-foreground mb-3 line-clamp-1">
+            <p className="text-xs text-muted-foreground mb-2 line-clamp-1">
               {project.cliente?.nombre || "Sin cliente"}
             </p>
             
             <div className="flex items-baseline gap-2 pt-2 border-t border-border">
               <span className="text-xs text-muted-foreground">Ganancia:</span>
               <span
-                className={`text-base font-bold ${
+                className={`text-sm font-bold ${
                   project.ganancia_neta >= 0 ? "text-success" : "text-destructive"
                 }`}
               >
