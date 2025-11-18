@@ -39,6 +39,19 @@ const CreateProviderDialog = ({ open, onOpenChange, onSuccess }: CreateProviderD
     setLoading(true);
 
     try {
+      // Obtener el empresa_id del usuario actual
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Usuario no autenticado");
+
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("empresa_id")
+        .eq("id", user.id)
+        .single();
+
+      if (profileError) throw profileError;
+      if (!profile?.empresa_id) throw new Error("Usuario sin empresa asignada");
+
       const { error } = await supabase
         .from("proveedores")
         .insert({
@@ -48,6 +61,7 @@ const CreateProviderDialog = ({ open, onOpenChange, onSuccess }: CreateProviderD
           cif: cif.trim() || null,
           direccion: direccion.trim() || null,
           tipo_material: tipoMaterial.trim() || null,
+          empresa_id: profile.empresa_id,
         });
 
       if (error) throw error;
