@@ -8,8 +8,8 @@ import { toast } from "sonner";
 
 const ColorfulCalendarIcon = () => (
   <svg
-    width="48"
-    height="48"
+    width="56"
+    height="56"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -87,9 +87,9 @@ const HeaderCalendar = () => {
     <div className="relative">
       <Button
         variant="ghost"
-        size="sm"
+        size="lg"
         onClick={() => setIsExpanded(!isExpanded)}
-        className="flex items-center gap-2"
+        className="flex items-center gap-3 h-auto py-2"
       >
         <ColorfulCalendarIcon />
         <span className="font-medium">Calendario</span>
