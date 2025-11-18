@@ -107,18 +107,18 @@ export async function seedProjects() {
 
     // Add budget items for project 1
     await supabase.from('items_presupuesto').insert([
-      { obra_id: projects[0].id, descripcion: 'Revisión y diagnóstico del sistema eléctrico', precio: 150000 },
+      { obra_id: projects[0].id, descripcion: 'Revisión y diagnóstico del sistema eléctrico', precio: 155000 },
       { obra_id: projects[0].id, descripcion: 'Reemplazo de cableado defectuoso', precio: 450000 },
-      { obra_id: projects[0].id, descripcion: 'Instalación de nuevo tablero eléctrico', precio: 380000 },
+      { obra_id: projects[0].id, descripcion: 'Instalación de nuevo tablero eléctrico', precio: 385000 },
       { obra_id: projects[0].id, descripcion: 'Mano de obra especializada', precio: 520000 }
     ]);
 
     // Add expenses for project 1
     await supabase.from('gastos').insert([
-      { obra_id: projects[0].id, descripcion: 'Cables eléctricos calibre 12', monto: 185000, proveedor_id: proveedoresData[0].id },
+      { obra_id: projects[0].id, descripcion: 'Cables eléctricos calibre 12', monto: 188000, proveedor_id: proveedoresData[0].id },
       { obra_id: projects[0].id, descripcion: 'Tablero eléctrico 24 circuitos', monto: 295000, proveedor_id: proveedoresData[0].id },
-      { obra_id: projects[0].id, descripcion: 'Interruptores y enchufes', monto: 120000, proveedor_id: proveedoresData[1].id },
-      { obra_id: projects[0].id, descripcion: 'Herramientas y materiales menores', monto: 85000, proveedor_id: proveedoresData[1].id }
+      { obra_id: projects[0].id, descripcion: 'Interruptores y enchufes', monto: 122000, proveedor_id: proveedoresData[1].id },
+      { obra_id: projects[0].id, descripcion: 'Herramientas y materiales menores', monto: 87000, proveedor_id: proveedoresData[1].id }
     ]);
 
     // Update project 2 - Fontanero (Noviembre)
@@ -136,18 +136,18 @@ export async function seedProjects() {
 
     // Add budget items for project 2
     await supabase.from('items_presupuesto').insert([
-      { obra_id: projects[1].id, descripcion: 'Retiro de instalaciones antiguas', precio: 280000 },
+      { obra_id: projects[1].id, descripcion: 'Retiro de instalaciones antiguas', precio: 290000 },
       { obra_id: projects[1].id, descripcion: 'Instalación de nuevas cañerías', precio: 620000 },
-      { obra_id: projects[1].id, descripcion: 'Instalación de artefactos sanitarios', precio: 450000 },
+      { obra_id: projects[1].id, descripcion: 'Instalación de artefactos sanitarios', precio: 465000 },
       { obra_id: projects[1].id, descripcion: 'Mano de obra gasfitería', precio: 550000 }
     ]);
 
     // Add expenses for project 2
     await supabase.from('gastos').insert([
-      { obra_id: projects[1].id, descripcion: 'Tuberías de cobre y PVC', monto: 320000, proveedor_id: proveedoresData[2].id },
-      { obra_id: projects[1].id, descripcion: 'WC y lavamanos', monto: 385000, proveedor_id: proveedoresData[2].id },
-      { obra_id: projects[1].id, descripcion: 'Grifería y accesorios', monto: 245000, proveedor_id: proveedoresData[1].id },
-      { obra_id: projects[1].id, descripcion: 'Materiales de instalación', monto: 125000, proveedor_id: proveedoresData[0].id }
+      { obra_id: projects[1].id, descripcion: 'Tuberías de cobre y PVC', monto: 325000, proveedor_id: proveedoresData[2].id },
+      { obra_id: projects[1].id, descripcion: 'WC y lavamanos', monto: 395000, proveedor_id: proveedoresData[2].id },
+      { obra_id: projects[1].id, descripcion: 'Grifería y accesorios', monto: 248000, proveedor_id: proveedoresData[1].id },
+      { obra_id: projects[1].id, descripcion: 'Materiales de instalación', monto: 132000, proveedor_id: proveedoresData[0].id }
     ]);
 
     // Update project 3 - Techumbre (Noviembre)
@@ -165,18 +165,18 @@ export async function seedProjects() {
 
     // Add budget items for project 3
     await supabase.from('items_presupuesto').insert([
-      { obra_id: projects[2].id, descripcion: 'Evaluación y medición de techumbre', precio: 120000 },
+      { obra_id: projects[2].id, descripcion: 'Evaluación y medición de techumbre', precio: 128000 },
       { obra_id: projects[2].id, descripcion: 'Reemplazo de tejas dañadas', precio: 680000 },
       { obra_id: projects[2].id, descripcion: 'Impermeabilización completa', precio: 420000 },
-      { obra_id: projects[2].id, descripcion: 'Mano de obra especializada', precio: 580000 }
+      { obra_id: projects[2].id, descripcion: 'Mano de obra especializada', precio: 585000 }
     ]);
 
     // Add expenses for project 3
     await supabase.from('gastos').insert([
-      { obra_id: projects[2].id, descripcion: 'Tejas cerámicas premium', monto: 425000, proveedor_id: proveedoresData[2].id },
-      { obra_id: projects[2].id, descripcion: 'Membrana impermeabilizante', monto: 285000, proveedor_id: proveedoresData[1].id },
-      { obra_id: projects[2].id, descripcion: 'Estructura de soporte', monto: 195000, proveedor_id: proveedoresData[0].id },
-      { obra_id: projects[2].id, descripcion: 'Selladores y fijaciones', monto: 110000, proveedor_id: proveedoresData[0].id }
+      { obra_id: projects[2].id, descripcion: 'Tejas cerámicas premium', monto: 428000, proveedor_id: proveedoresData[2].id },
+      { obra_id: projects[2].id, descripcion: 'Membrana impermeabilizante', monto: 292000, proveedor_id: proveedoresData[1].id },
+      { obra_id: projects[2].id, descripcion: 'Estructura de soporte', monto: 198000, proveedor_id: proveedoresData[0].id },
+      { obra_id: projects[2].id, descripcion: 'Selladores y fijaciones', monto: 115000, proveedor_id: proveedoresData[0].id }
     ]);
 
     // Create 2 additional projects for December
@@ -207,26 +207,26 @@ export async function seedProjects() {
     if (decemberProjects) {
       // Add budget items for December project 1 (Pintor)
       await supabase.from('items_presupuesto').insert([
-        { obra_id: decemberProjects[0].id, descripcion: 'Preparación de superficies y masillado', precio: 220000 },
-        { obra_id: decemberProjects[0].id, descripcion: 'Pintura de dormitorios y living', precio: 380000 },
-        { obra_id: decemberProjects[0].id, descripcion: 'Pintura de cocina y baños', precio: 180000 }
+        { obra_id: decemberProjects[0].id, descripcion: 'Preparación de superficies y masillado', precio: 225000 },
+        { obra_id: decemberProjects[0].id, descripcion: 'Pintura de dormitorios y living', precio: 395000 },
+        { obra_id: decemberProjects[0].id, descripcion: 'Pintura de cocina y baños', precio: 185000 }
       ]);
 
       await supabase.from('gastos').insert([
-        { obra_id: decemberProjects[0].id, descripcion: 'Pintura y materiales', monto: 185000, proveedor_id: proveedoresData[0].id },
-        { obra_id: decemberProjects[0].id, descripcion: 'Masilla y herramientas', monto: 95000, proveedor_id: proveedoresData[1].id }
+        { obra_id: decemberProjects[0].id, descripcion: 'Pintura y materiales', monto: 192000, proveedor_id: proveedoresData[0].id },
+        { obra_id: decemberProjects[0].id, descripcion: 'Masilla y herramientas', monto: 98000, proveedor_id: proveedoresData[1].id }
       ]);
 
       // Add budget items for December project 2 (Ceramista)
       await supabase.from('items_presupuesto').insert([
-        { obra_id: decemberProjects[1].id, descripcion: 'Cerámicas para baño', precio: 280000 },
-        { obra_id: decemberProjects[1].id, descripcion: 'Cerámicas para cocina', precio: 320000 },
-        { obra_id: decemberProjects[1].id, descripcion: 'Mano de obra instalación', precio: 350000 }
+        { obra_id: decemberProjects[1].id, descripcion: 'Cerámicas para baño', precio: 305000 },
+        { obra_id: decemberProjects[1].id, descripcion: 'Cerámicas para cocina', precio: 335000 },
+        { obra_id: decemberProjects[1].id, descripcion: 'Mano de obra instalación', precio: 360000 }
       ]);
 
       await supabase.from('gastos').insert([
-        { obra_id: decemberProjects[1].id, descripcion: 'Cerámicas premium', monto: 385000, proveedor_id: proveedoresData[2].id },
-        { obra_id: decemberProjects[1].id, descripcion: 'Adhesivos y fragüe', monto: 125000, proveedor_id: proveedoresData[1].id }
+        { obra_id: decemberProjects[1].id, descripcion: 'Cerámicas premium', monto: 405000, proveedor_id: proveedoresData[2].id },
+        { obra_id: decemberProjects[1].id, descripcion: 'Adhesivos y fragüe', monto: 135000, proveedor_id: proveedoresData[1].id }
       ]);
     }
 
@@ -249,13 +249,13 @@ export async function seedProjects() {
     if (januaryProjects) {
       // Add budget items for January project (Carpintero)
       await supabase.from('items_presupuesto').insert([
-        { obra_id: januaryProjects[0].id, descripcion: 'Diseño y mediciones', precio: 150000 },
+        { obra_id: januaryProjects[0].id, descripcion: 'Diseño y mediciones', precio: 165000 },
         { obra_id: januaryProjects[0].id, descripcion: 'Materiales de madera', precio: 650000 },
-        { obra_id: januaryProjects[0].id, descripcion: 'Fabricación e instalación', precio: 480000 }
+        { obra_id: januaryProjects[0].id, descripcion: 'Fabricación e instalación', precio: 488000 }
       ]);
 
       await supabase.from('gastos').insert([
-        { obra_id: januaryProjects[0].id, descripcion: 'Madera y tableros', monto: 280000, proveedor_id: proveedoresData[0].id }
+        { obra_id: januaryProjects[0].id, descripcion: 'Madera y tableros', monto: 298000, proveedor_id: proveedoresData[0].id }
       ]);
     }
 

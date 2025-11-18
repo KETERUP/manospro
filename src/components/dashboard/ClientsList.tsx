@@ -86,54 +86,54 @@ const ClientsList = ({ searchQuery }: ClientsListProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
       {filteredClientes.map((cliente) => (
         <Card key={cliente.id} className="hover:shadow-lg transition-shadow">
-          <CardContent className="p-6">
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="font-bold text-lg text-foreground">{cliente.nombre}</h3>
-              <div className="flex gap-2">
+          <CardContent className="p-4">
+            <div className="flex justify-between items-start mb-3">
+              <h3 className="font-bold text-base text-foreground line-clamp-1">{cliente.nombre}</h3>
+              <div className="flex gap-1">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-muted-foreground hover:text-primary"
+                  className="h-7 w-7 text-muted-foreground hover:text-primary"
                 >
-                  <Pencil className="h-4 w-4" />
+                  <Pencil className="h-3.5 w-3.5" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                  className="h-7 w-7 text-muted-foreground hover:text-destructive"
                   onClick={() => handleDelete(cliente.id)}
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-3.5 w-3.5" />
                 </Button>
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {cliente.nif_cif && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <FileText className="h-4 w-4" />
-                  <span>{cliente.nif_cif}</span>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="truncate">{cliente.nif_cif}</span>
                 </div>
               )}
               {cliente.email && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Mail className="h-4 w-4" />
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Mail className="h-3.5 w-3.5 flex-shrink-0" />
                   <span className="truncate">{cliente.email}</span>
                 </div>
               )}
               {cliente.telefono && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Phone className="h-4 w-4" />
-                  <span>{cliente.telefono}</span>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Phone className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="truncate">{cliente.telefono}</span>
                 </div>
               )}
               {cliente.direccion && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <MapPin className="h-4 w-4" />
-                  <span className="line-clamp-2">{cliente.direccion}</span>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="line-clamp-2 text-xs">{cliente.direccion}</span>
                 </div>
               )}
             </div>
