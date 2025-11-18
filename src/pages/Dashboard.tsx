@@ -121,14 +121,23 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="container mx-auto px-6 py-8">
         <Tabs defaultValue="proyectos" className="w-full" onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3 mb-6">
-            <TabsTrigger value="proyectos" className="text-base">
+          <TabsList className="grid w-full grid-cols-3 mb-6 bg-primary/10 p-2 gap-2 h-auto">
+            <TabsTrigger 
+              value="proyectos" 
+              className="text-xl font-bold py-4 bg-primary text-primary-foreground hover:bg-primary-hover data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
+            >
               Proyectos
             </TabsTrigger>
-            <TabsTrigger value="clientes" className="text-base">
+            <TabsTrigger 
+              value="clientes" 
+              className="text-xl font-bold py-4 bg-primary text-primary-foreground hover:bg-primary-hover data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
+            >
               Clientes
             </TabsTrigger>
-            <TabsTrigger value="proveedores" className="text-base">
+            <TabsTrigger 
+              value="proveedores" 
+              className="text-xl font-bold py-4 bg-primary text-primary-foreground hover:bg-primary-hover data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
+            >
               Proveedores
             </TabsTrigger>
           </TabsList>
