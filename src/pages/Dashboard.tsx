@@ -140,83 +140,85 @@ const Dashboard = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-6">
         <Tabs defaultValue="proyectos" className="w-full" onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3 mb-6 bg-primary/10 p-2 gap-2 h-auto">
-            <TabsTrigger 
-              value="proyectos" 
-              className="text-xl font-bold py-4 bg-primary text-primary-foreground hover:bg-primary-hover data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
-            >
-              Proyectos
-            </TabsTrigger>
-            <TabsTrigger 
-              value="clientes" 
-              className="text-xl font-bold py-4 bg-primary text-primary-foreground hover:bg-primary-hover data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
-            >
-              Clientes
-            </TabsTrigger>
-            <TabsTrigger 
-              value="proveedores" 
-              className="text-xl font-bold py-4 bg-primary text-primary-foreground hover:bg-primary-hover data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
-            >
-              Proveedores
-            </TabsTrigger>
-          </TabsList>
+          {/* Tabs fijas */}
+          <div className="sticky top-[104px] z-40 bg-background py-4">
+            <TabsList className="grid w-full grid-cols-3 mb-0 bg-primary/10 p-2 gap-2 h-auto">
+              <TabsTrigger 
+                value="proyectos" 
+                className="text-xl font-bold py-4 bg-primary text-primary-foreground hover:bg-primary-hover data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
+              >
+                Proyectos
+              </TabsTrigger>
+              <TabsTrigger 
+                value="clientes" 
+                className="text-xl font-bold py-4 bg-primary text-primary-foreground hover:bg-primary-hover data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
+              >
+                Clientes
+              </TabsTrigger>
+              <TabsTrigger 
+                value="proveedores" 
+                className="text-xl font-bold py-4 bg-primary text-primary-foreground hover:bg-primary-hover data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
+              >
+                Proveedores
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-          <TabsContent value="proyectos" className="space-y-6">
-            {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-              <Input
-                placeholder="Buscar proyectos o clientes..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-12 bg-card border-border shadow-sm text-base rounded-xl"
-              />
-            </div>
+          <TabsContent value="proyectos" className="mt-0">
+            {/* Search and Filters - sticky */}
+            <div className="sticky top-[188px] z-30 bg-background py-4 space-y-4 shadow-sm">
+              {/* Search Bar */}
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+                <Input
+                  placeholder="Buscar proyectos o clientes..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 h-12 bg-card border-border shadow-sm text-base rounded-xl"
+                />
+              </div>
 
-            {/* Status Filters */}
-            <div className="flex gap-3 overflow-x-auto pb-2">
-              {[
-                { value: "Todos", label: "Todos" },
-                { value: "PENDIENTE", label: "Pendiente" },
-                { value: "APROBADO", label: "Aprobado" },
-                { value: "EN_PROGRESO", label: "En Progreso" },
-                { value: "TERMINADO", label: "Terminado" },
-                { value: "RECHAZADO", label: "Rechazado" }
-              ].map((status) => (
-                <Button
-                  key={status.value}
-                  variant={statusFilter === status.value ? "default" : "outline"}
-                  size="default"
-                  onClick={() => setStatusFilter(status.value)}
-                  className={
-                    statusFilter === status.value
-                      ? "bg-primary text-white hover:bg-primary-hover rounded-full font-medium shadow-sm"
-                      : "bg-card text-foreground hover:bg-accent hover:text-accent-foreground border-border rounded-full font-medium"
-                  }
-                >
-                  {status.label}
-                </Button>
-              ))}
+              {/* Status Filters */}
+              <div className="flex gap-3 overflow-x-auto pb-2">
+                {[
+                  { value: "Todos", label: "Todos" },
+                  { value: "PENDIENTE", label: "Pendiente" },
+                  { value: "APROBADO", label: "Aprobado" },
+                  { value: "EN_PROGRESO", label: "En Progreso" },
+                  { value: "TERMINADO", label: "Terminado" },
+                  { value: "RECHAZADO", label: "Rechazado" }
+                ].map((status) => (
+                  <Button
+                    key={status.value}
+                    variant={statusFilter === status.value ? "default" : "outline"}
+                    size="default"
+                    onClick={() => setStatusFilter(status.value)}
+                    className={
+                      statusFilter === status.value
+                        ? "bg-primary text-white hover:bg-primary-hover rounded-full font-medium shadow-sm"
+                        : "bg-card text-foreground hover:bg-accent hover:text-accent-foreground border-border rounded-full font-medium"
+                    }
+                  >
+                    {status.label}
+                  </Button>
+                ))}
+              </div>
             </div>
 
             {/* Projects List */}
-            <ProjectsList 
-              searchQuery={searchQuery}
-              statusFilter={statusFilter}
-            />
+            <div className="py-6">
+              <ProjectsList 
+                searchQuery={searchQuery}
+                statusFilter={statusFilter}
+              />
+            </div>
           </TabsContent>
 
-          <TabsContent value="clientes" className="space-y-6">
-            {/* Resumen Financiero dentro de Clientes */}
-            <div className="mb-8">
-              <FinancialSummary />
-            </div>
-
-            {/* Lista de Clientes */}
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-foreground">Lista de Clientes</h2>
+          <TabsContent value="clientes" className="mt-0">
+            {/* Búsqueda sticky */}
+            <div className="sticky top-[188px] z-30 bg-background py-4">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                 <Input
@@ -226,21 +228,38 @@ const Dashboard = () => {
                   className="pl-12 h-12 bg-card border-border shadow-sm text-base rounded-xl"
                 />
               </div>
+            </div>
+
+            {/* Resumen Financiero */}
+            <div className="py-6">
+              <FinancialSummary />
+            </div>
+
+            {/* Lista de Clientes */}
+            <div className="pb-6">
+              <h2 className="text-2xl font-bold text-foreground mb-4">Lista de Clientes</h2>
               <ClientsList searchQuery={searchQuery} key={refreshClients} />
             </div>
           </TabsContent>
 
-          <TabsContent value="proveedores" className="space-y-4">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-              <Input
-                placeholder="Buscar proveedores por nombre, email, CIF o tipo de material..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-12 bg-card border-border shadow-sm text-base rounded-xl"
-              />
+          <TabsContent value="proveedores" className="mt-0">
+            {/* Búsqueda sticky */}
+            <div className="sticky top-[188px] z-30 bg-background py-4">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+                <Input
+                  placeholder="Buscar proveedores por nombre, email, CIF o tipo de material..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 h-12 bg-card border-border shadow-sm text-base rounded-xl"
+                />
+              </div>
             </div>
-            <ProvidersList searchQuery={searchQuery} key={refreshProviders} />
+
+            {/* Lista de Proveedores */}
+            <div className="py-6">
+              <ProvidersList searchQuery={searchQuery} key={refreshProviders} />
+            </div>
           </TabsContent>
         </Tabs>
       </main>
