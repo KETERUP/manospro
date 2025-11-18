@@ -7,15 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LogOut, Plus, Search, Settings } from "lucide-react";
 import { toast } from "sonner";
-import logo from "@/assets/logo-manospro-header.png";
 import logoIcon from "@/assets/logo-icon-manospro.png";
 import loadingImage from "@/assets/loading-manospro.png";
 import ProjectsList from "@/components/dashboard/ProjectsList";
-import CalendarView from "@/components/dashboard/CalendarView";
 import FinancialSummary from "@/components/dashboard/FinancialSummary";
 import CreateProjectDialog from "@/components/dashboard/CreateProjectDialog";
 import CreateClientDialog from "@/components/dashboard/CreateClientDialog";
+import CreateProviderDialog from "@/components/dashboard/CreateProviderDialog";
 import ClientsList from "@/components/dashboard/ClientsList";
+import ProvidersList from "@/components/dashboard/ProvidersList";
+import HeaderCalendar from "@/components/dashboard/HeaderCalendar";
 import { seedProjects } from "@/utils/seedProjects";
 
 const Dashboard = () => {
@@ -26,7 +27,9 @@ const Dashboard = () => {
   const [statusFilter, setStatusFilter] = useState<string>("Todos");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showCreateClientDialog, setShowCreateClientDialog] = useState(false);
+  const [showCreateProviderDialog, setShowCreateProviderDialog] = useState(false);
   const [refreshClients, setRefreshClients] = useState(0);
+  const [refreshProviders, setRefreshProviders] = useState(0);
   const [activeTab, setActiveTab] = useState("proyectos");
 
   useEffect(() => {
@@ -34,7 +37,6 @@ const Dashboard = () => {
       if (session?.user) {
         setUser(session.user);
         
-        // Check if we need to seed projects (only run once)
         const seeded = localStorage.getItem('projects_seeded_v4');
         if (!seeded) {
           const success = await seedProjects();
@@ -93,21 +95,23 @@ const Dashboard = () => {
                 <div className="h-1 bg-gradient-to-r from-primary to-transparent rounded-full mt-1"></div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
+              <HeaderCalendar />
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-muted-foreground hover:text-primary hover:bg-accent"
+                onClick={() => navigate("/settings")}
+                title="Configuración"
               >
                 <Settings className="h-5 w-5" />
               </Button>
               <Button
-                variant="ghost"
-                size="icon"
+                variant="destructive"
                 onClick={handleLogout}
-                className="text-muted-foreground hover:text-primary hover:bg-accent"
+                className="gap-2"
               >
                 <LogOut className="h-5 w-5" />
+                Cerrar Sesión
               </Button>
             </div>
           </div>
@@ -117,30 +121,15 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="container mx-auto px-6 py-8">
         <Tabs defaultValue="proyectos" className="w-full" onValueChange={setActiveTab}>
-          <TabsList className="w-full grid grid-cols-4 mb-8 bg-card shadow-sm h-12">
-            <TabsTrigger 
-              value="proyectos"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg font-medium"
-            >
+          <TabsList className="grid w-full grid-cols-3 mb-6">
+            <TabsTrigger value="proyectos" className="text-base">
               Proyectos
             </TabsTrigger>
-            <TabsTrigger 
-              value="clientes"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg font-medium"
-            >
+            <TabsTrigger value="clientes" className="text-base">
               Clientes
             </TabsTrigger>
-            <TabsTrigger 
-              value="calendario"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg font-medium"
-            >
-              Calendario
-            </TabsTrigger>
-            <TabsTrigger 
-              value="financiero"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg font-medium"
-            >
-              Resumen Financiero
+            <TabsTrigger value="proveedores" className="text-base">
+              Proveedores
             </TabsTrigger>
           </TabsList>
 
@@ -190,27 +179,38 @@ const Dashboard = () => {
           </TabsContent>
 
           <TabsContent value="clientes" className="space-y-6">
-            {/* Search Bar */}
+            {/* Resumen Financiero dentro de Clientes */}
+            <div className="mb-8">
+              <FinancialSummary />
+            </div>
+
+            {/* Lista de Clientes */}
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold text-foreground">Lista de Clientes</h2>
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+                <Input
+                  placeholder="Buscar clientes por nombre, email o CIF..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 h-12 bg-card border-border shadow-sm text-base rounded-xl"
+                />
+              </div>
+              <ClientsList searchQuery={searchQuery} key={refreshClients} />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="proveedores" className="space-y-4">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <Input
-                placeholder="Buscar clientes por nombre, email o teléfono..."
+                placeholder="Buscar proveedores por nombre, email, CIF o tipo de material..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-12 h-12 bg-card border-border shadow-sm text-base rounded-xl"
               />
             </div>
-
-            {/* Clients List */}
-            <ClientsList searchQuery={searchQuery} key={refreshClients} />
-          </TabsContent>
-
-          <TabsContent value="calendario">
-            <CalendarView />
-          </TabsContent>
-
-          <TabsContent value="financiero">
-            <FinancialSummary />
+            <ProvidersList searchQuery={searchQuery} key={refreshProviders} />
           </TabsContent>
         </Tabs>
       </main>
@@ -220,12 +220,14 @@ const Dashboard = () => {
         onClick={() => {
           if (activeTab === "clientes") {
             setShowCreateClientDialog(true);
+          } else if (activeTab === "proveedores") {
+            setShowCreateProviderDialog(true);
           } else {
             setShowCreateDialog(true);
           }
         }}
-        className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-primary hover:bg-primary-hover text-white shadow-xl hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 hover:scale-110"
-        size="icon"
+        size="lg"
+        className="fixed bottom-8 right-8 h-16 w-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-40"
       >
         <Plus className="h-8 w-8" />
       </Button>
@@ -235,10 +237,20 @@ const Dashboard = () => {
         onOpenChange={setShowCreateDialog}
       />
       
-      <CreateClientDialog 
+      <CreateClientDialog
         open={showCreateClientDialog}
         onOpenChange={setShowCreateClientDialog}
-        onSuccess={() => setRefreshClients(prev => prev + 1)}
+        onSuccess={() => {
+          setRefreshClients(prev => prev + 1);
+        }}
+      />
+
+      <CreateProviderDialog
+        open={showCreateProviderDialog}
+        onOpenChange={setShowCreateProviderDialog}
+        onSuccess={() => {
+          setRefreshProviders(prev => prev + 1);
+        }}
       />
     </div>
   );
