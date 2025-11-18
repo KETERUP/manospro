@@ -114,14 +114,14 @@ const CreateProviderDialog = ({ open, onOpenChange, onSuccess }: CreateProviderD
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Nuevo Proveedor</DialogTitle>
           <DialogDescription>
             Ingrese los datos del nuevo proveedor
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 pr-2">
           <div className="space-y-2">
             <Label htmlFor="nombre">Nombre *</Label>
             <Input
