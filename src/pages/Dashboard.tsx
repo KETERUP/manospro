@@ -123,22 +123,22 @@ const Dashboard = () => {
         <Tabs defaultValue="proyectos" className="w-full" onValueChange={setActiveTab}>
           {/* Tabs fijas */}
           <div className="sticky top-[104px] z-40 bg-background py-4">
-            <TabsList className="grid w-full grid-cols-3 mb-0 bg-primary/10 p-2 gap-2 h-auto">
+            <TabsList className="grid w-full grid-cols-3 mb-0 bg-transparent p-2 gap-2 h-auto">
               <TabsTrigger 
                 value="proyectos" 
-                className="text-xl font-bold py-4 bg-primary text-primary-foreground hover:bg-primary-hover data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
+                className="text-xl font-bold py-4 bg-primary/20 text-primary hover:bg-primary/30 data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
               >
                 Proyectos
               </TabsTrigger>
               <TabsTrigger 
                 value="clientes" 
-                className="text-xl font-bold py-4 bg-primary text-primary-foreground hover:bg-primary-hover data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
+                className="text-xl font-bold py-4 bg-primary/20 text-primary hover:bg-primary/30 data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
               >
                 Clientes
               </TabsTrigger>
               <TabsTrigger 
                 value="proveedores" 
-                className="text-xl font-bold py-4 bg-primary text-primary-foreground hover:bg-primary-hover data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
+                className="text-xl font-bold py-4 bg-primary/20 text-primary hover:bg-primary/30 data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 rounded-lg"
               >
                 Proveedores
               </TabsTrigger>
