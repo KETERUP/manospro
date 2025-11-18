@@ -40,19 +40,39 @@ const CreateProviderDialog = ({ open, onOpenChange, onSuccess }: CreateProviderD
 
     try {
       // Obtener el empresa_id del usuario actual
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Usuario no autenticado");
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError) {
+        console.error("Error al obtener usuario:", userError);
+        throw new Error("Error al obtener usuario");
+      }
+      
+      if (!user) {
+        console.error("Usuario no autenticado");
+        throw new Error("Usuario no autenticado");
+      }
+
+      console.log("Usuario autenticado:", user.id);
 
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("empresa_id")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
 
-      if (profileError) throw profileError;
-      if (!profile?.empresa_id) throw new Error("Usuario sin empresa asignada");
+      if (profileError) {
+        console.error("Error al obtener perfil:", profileError);
+        throw profileError;
+      }
+      
+      if (!profile?.empresa_id) {
+        console.error("Usuario sin empresa asignada", profile);
+        throw new Error("Usuario sin empresa asignada");
+      }
 
-      const { error } = await supabase
+      console.log("Empresa ID:", profile.empresa_id);
+
+      const { data, error } = await supabase
         .from("proveedores")
         .insert({
           nombre: nombre.trim(),
@@ -62,9 +82,15 @@ const CreateProviderDialog = ({ open, onOpenChange, onSuccess }: CreateProviderD
           direccion: direccion.trim() || null,
           tipo_material: tipoMaterial.trim() || null,
           empresa_id: profile.empresa_id,
-        });
+        })
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error al insertar proveedor:", error);
+        throw error;
+      }
+
+      console.log("Proveedor creado:", data);
 
       toast.success("Proveedor creado exitosamente");
       setNombre("");
