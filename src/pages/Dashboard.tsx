@@ -18,7 +18,6 @@ import ClientsList from "@/components/dashboard/ClientsList";
 import ProvidersList from "@/components/dashboard/ProvidersList";
 import HeaderCalendar from "@/components/dashboard/HeaderCalendar";
 import { seedProjects } from "@/utils/seedProjects";
-import { updateProjectImages } from "@/utils/updateProjectImages";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -70,18 +69,6 @@ const Dashboard = () => {
     navigate("/login");
   };
 
-  const handleUpdateImages = async () => {
-    toast.loading("Actualizando imágenes...");
-    const success = await updateProjectImages();
-    toast.dismiss();
-    if (success) {
-      toast.success("Imágenes actualizadas correctamente");
-      window.location.reload();
-    } else {
-      toast.error("Error al actualizar imágenes");
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -110,14 +97,6 @@ const Dashboard = () => {
             </div>
             <div className="flex items-center gap-4">
               <HeaderCalendar />
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleUpdateImages}
-                title="Actualizar Imágenes Proyectos"
-              >
-                Actualizar Imágenes
-              </Button>
               <Button
                 variant="ghost"
                 size="icon"
