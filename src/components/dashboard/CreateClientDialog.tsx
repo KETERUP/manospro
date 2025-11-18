@@ -6,6 +6,24 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { z } from "zod";
+
+const clientSchema = z.object({
+  nombre: z.string()
+    .trim()
+    .min(1, "El nombre es requerido")
+    .max(100, "El nombre no puede exceder 100 caracteres"),
+  telefono: z.string()
+    .trim()
+    .max(20, "El teléfono no puede exceder 20 caracteres")
+    .optional(),
+  email: z.string()
+    .trim()
+    .email("Formato de email inválido")
+    .max(255, "El email no puede exceder 255 caracteres")
+    .optional()
+    .or(z.literal("")),
+});
 
 interface CreateClientDialogProps {
   open: boolean;
@@ -22,8 +40,15 @@ const CreateClientDialog = ({ open, onOpenChange, onSuccess }: CreateClientDialo
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!nombre) {
-      toast.error("El nombre del cliente es requerido");
+    const validationResult = clientSchema.safeParse({
+      nombre,
+      telefono: telefono || undefined,
+      email: email || undefined,
+    });
+
+    if (!validationResult.success) {
+      const firstError = validationResult.error.errors[0];
+      toast.error(firstError.message);
       return;
     }
 
@@ -34,9 +59,9 @@ const CreateClientDialog = ({ open, onOpenChange, onSuccess }: CreateClientDialo
       if (!user) throw new Error("No user logged in");
 
       const { error } = await supabase.from("clientes").insert({
-        nombre,
-        telefono: telefono || null,
-        email: email || null,
+        nombre: validationResult.data.nombre,
+        telefono: validationResult.data.telefono || null,
+        email: validationResult.data.email || null,
       });
 
       if (error) throw error;

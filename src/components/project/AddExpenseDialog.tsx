@@ -8,6 +8,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2, Plus } from "lucide-react";
 import CreateProviderDialog from "./CreateProviderDialog";
+import { z } from "zod";
+
+const expenseSchema = z.object({
+  descripcion: z.string()
+    .trim()
+    .min(1, "La descripción es requerida")
+    .max(500, "La descripción no puede exceder 500 caracteres"),
+  monto: z.number()
+    .positive("El monto debe ser mayor que 0")
+    .max(999999999, "El monto no puede exceder 999,999,999"),
+});
 
 interface Provider {
   id: string;
@@ -52,8 +63,14 @@ const AddExpenseDialog = ({ open, onOpenChange, projectId, onSuccess }: AddExpen
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!descripcion || !monto) {
-      toast.error("Descripción y monto son requeridos");
+    const validationResult = expenseSchema.safeParse({
+      descripcion,
+      monto: parseFloat(monto),
+    });
+
+    if (!validationResult.success) {
+      const firstError = validationResult.error.errors[0];
+      toast.error(firstError.message);
       return;
     }
 
@@ -62,8 +79,8 @@ const AddExpenseDialog = ({ open, onOpenChange, projectId, onSuccess }: AddExpen
     try {
       const { error } = await supabase.from("gastos").insert({
         obra_id: projectId,
-        descripcion,
-        monto: parseFloat(monto),
+        descripcion: validationResult.data.descripcion,
+        monto: validationResult.data.monto,
         proveedor_id: proveedorId || null,
       });
 

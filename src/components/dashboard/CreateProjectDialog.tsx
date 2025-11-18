@@ -8,6 +8,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2, Plus, Image as ImageIcon } from "lucide-react";
 import CreateClientDialog from "./CreateClientDialog";
+import { z } from "zod";
+
+const projectSchema = z.object({
+  nombreObra: z.string()
+    .trim()
+    .min(1, "El nombre de la obra es requerido")
+    .max(100, "El nombre no puede exceder 100 caracteres"),
+});
+
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 interface Client {
   id: string;
@@ -51,6 +62,20 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Validate file type
+      if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        toast.error("Solo se permiten imágenes JPEG, PNG o WebP");
+        e.target.value = "";
+        return;
+      }
+      
+      // Validate file size
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error("La imagen no puede exceder 5MB");
+        e.target.value = "";
+        return;
+      }
+      
       setImagenProyecto(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -63,8 +88,13 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!nombreObra) {
-      toast.error("El nombre de la obra es requerido");
+    const validationResult = projectSchema.safeParse({
+      nombreObra,
+    });
+
+    if (!validationResult.success) {
+      const firstError = validationResult.error.errors[0];
+      toast.error(firstError.message);
       return;
     }
 
@@ -95,7 +125,7 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
       }
 
       const { error } = await supabase.from("obras").insert({
-        nombre_obra: nombreObra,
+        nombre_obra: validationResult.data.nombreObra,
         cliente_id: clienteId || null,
         user_id: user.id,
         imagen_proyecto: imagenUrl,
