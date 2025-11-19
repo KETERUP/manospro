@@ -19,6 +19,7 @@ import ProvidersList from "@/components/dashboard/ProvidersList";
 import HeaderCalendar from "@/components/dashboard/HeaderCalendar";
 import { seedProjects } from "@/utils/seedProjects";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { uploadGeneratedImageToProject } from "@/utils/uploadGeneratedImage";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -33,6 +34,27 @@ const Dashboard = () => {
   const [refreshClients, setRefreshClients] = useState(0);
   const [refreshProviders, setRefreshProviders] = useState(0);
   const [activeTab, setActiveTab] = useState("proyectos");
+
+  // Upload generated image for Casa de los Espiritus project
+  useEffect(() => {
+    const uploadImage = async () => {
+      const uploaded = localStorage.getItem('pintor_image_uploaded');
+      if (!uploaded) {
+        try {
+          await uploadGeneratedImageToProject(
+            '6bf1d51c-81ad-49a4-b215-35b746756d57',
+            '/temp-pintor-casa-espiritus.jpg'
+          );
+          localStorage.setItem('pintor_image_uploaded', 'true');
+          toast.success("Imagen agregada al proyecto");
+          setTimeout(() => window.location.reload(), 1000);
+        } catch (error) {
+          console.error('Error uploading image:', error);
+        }
+      }
+    };
+    uploadImage();
+  }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
