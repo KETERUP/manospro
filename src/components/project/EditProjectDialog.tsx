@@ -57,7 +57,7 @@ interface EditProjectDialogProps {
 const EditProjectDialog = ({ open, onOpenChange, projectId, currentData, onUpdate }: EditProjectDialogProps) => {
   const [nombreObra, setNombreObra] = useState(currentData.nombre_obra);
   const [descripcion, setDescripcion] = useState(currentData.descripcion || "");
-  const [clienteId, setClienteId] = useState(currentData.cliente_id || "");
+  const [clienteId, setClienteId] = useState(currentData.cliente_id || "NO_CLIENT");
   const [montoTotal, setMontoTotal] = useState((currentData.monto_total || 0).toString());
   const [montoAdelantado, setMontoAdelantado] = useState((currentData.monto_adelantado || 0).toString());
   const [totalGastado, setTotalGastado] = useState((currentData.total_gastado || 0).toString());
@@ -73,7 +73,7 @@ const EditProjectDialog = ({ open, onOpenChange, projectId, currentData, onUpdat
       // Reset form with current data
       setNombreObra(currentData.nombre_obra);
       setDescripcion(currentData.descripcion || "");
-      setClienteId(currentData.cliente_id || "");
+      setClienteId(currentData.cliente_id || "NO_CLIENT");
       setMontoTotal((currentData.monto_total || 0).toString());
       setMontoAdelantado((currentData.monto_adelantado || 0).toString());
       setTotalGastado((currentData.total_gastado || 0).toString());
@@ -119,7 +119,7 @@ const EditProjectDialog = ({ open, onOpenChange, projectId, currentData, onUpdat
         .update({
           nombre_obra: validationResult.data.nombreObra,
           descripcion: validationResult.data.descripcion || null,
-          cliente_id: clienteId || null,
+          cliente_id: clienteId === "NO_CLIENT" ? null : clienteId,
           monto_total: validationResult.data.montoTotal,
           monto_adelantado: validationResult.data.montoAdelantado,
           total_gastado: validationResult.data.totalGastado,
@@ -164,7 +164,7 @@ const EditProjectDialog = ({ open, onOpenChange, projectId, currentData, onUpdat
                 <SelectValue placeholder="Seleccionar cliente" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Sin cliente</SelectItem>
+                <SelectItem value="NO_CLIENT">Sin cliente</SelectItem>
                 {clients.map((client) => (
                   <SelectItem key={client.id} value={client.id}>
                     {client.nombre}
