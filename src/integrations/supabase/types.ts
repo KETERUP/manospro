@@ -609,6 +609,8 @@ export type Database = {
           imagen_proyecto: string | null
           latitud: number | null
           longitud: number | null
+          monto_adelantado: number | null
+          monto_total: number | null
           nombre_obra: string
           total_gastado: number
           total_presupuestado: number
@@ -630,6 +632,8 @@ export type Database = {
           imagen_proyecto?: string | null
           latitud?: number | null
           longitud?: number | null
+          monto_adelantado?: number | null
+          monto_total?: number | null
           nombre_obra: string
           total_gastado?: number
           total_presupuestado?: number
@@ -651,6 +655,8 @@ export type Database = {
           imagen_proyecto?: string | null
           latitud?: number | null
           longitud?: number | null
+          monto_adelantado?: number | null
+          monto_total?: number | null
           nombre_obra?: string
           total_gastado?: number
           total_presupuestado?: number

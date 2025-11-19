@@ -14,9 +14,11 @@ import AddExpenseDialog from "@/components/project/AddExpenseDialog";
 interface ProjectData {
   id: string;
   nombre_obra: string;
+  descripcion: string | null;
   estado: string;
   fecha_visita: string | null;
-  total_presupuestado: number;
+  monto_total: number;
+  monto_adelantado: number;
   total_gastado: number;
   ganancia_neta: number;
   cliente: {
@@ -122,15 +124,16 @@ const ProjectDetail = () => {
       <main className="container mx-auto px-4 py-6 space-y-6">
         {/* Profitability Block */}
         <ProfitabilityCard
-          totalPresupuestado={project.total_presupuestado}
-          totalGastado={project.total_gastado}
-          gananciaNeta={project.ganancia_neta}
+          montoTotal={project.monto_total || 0}
+          montoAdelantado={project.monto_adelantado || 0}
+          totalGastado={project.total_gastado || 0}
           estado={project.estado}
         />
 
         {/* Project Info */}
         <ProjectInfo
           cliente={project.cliente?.nombre || "Sin cliente"}
+          descripcion={project.descripcion}
           estado={project.estado}
           fechaVisita={project.fecha_visita}
           projectId={project.id}

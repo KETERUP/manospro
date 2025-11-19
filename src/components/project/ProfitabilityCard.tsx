@@ -3,31 +3,33 @@ import { TrendingUp, DollarSign } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 
 interface ProfitabilityCardProps {
-  totalPresupuestado: number;
+  montoTotal: number;
+  montoAdelantado: number;
   totalGastado: number;
-  gananciaNeta: number;
   estado: string;
 }
 
 const ProfitabilityCard = ({ 
-  totalPresupuestado, 
-  totalGastado, 
-  gananciaNeta,
+  montoTotal, 
+  montoAdelantado, 
+  totalGastado,
   estado
 }: ProfitabilityCardProps) => {
-  const porIngresar = totalPresupuestado - totalGastado;
-  const porcentajeGastado = totalPresupuestado > 0 
-    ? (totalGastado / totalPresupuestado) * 100 
+  const porCobrar = montoTotal - montoAdelantado;
+  const gananciaNeta = montoTotal - totalGastado; // Ganancia final
+  const gananciaParcial = montoAdelantado - totalGastado; // Ganancia actual con adelanto
+  const porcentajeGastado = montoTotal > 0 
+    ? (totalGastado / montoTotal) * 100 
     : 0;
-  const porcentajePorIngresar = totalPresupuestado > 0 
-    ? (porIngresar / totalPresupuestado) * 100 
+  const porcentajeCobrado = montoTotal > 0 
+    ? (montoAdelantado / montoTotal) * 100 
     : 0;
 
-  const isNotCompleted = estado !== "Terminado";
+  const isNotCompleted = estado !== "TERMINADO";
 
   const chartData = [
-    { name: "Adelanto", value: totalGastado, color: "#10b981" },
-    { name: "Por Ingresar", value: Math.max(0, porIngresar), color: "#6366f1" }
+    { name: "Adelantado", value: montoAdelantado, color: "#10b981" },
+    { name: "Por Cobrar", value: Math.max(0, porCobrar), color: "#6366f1" }
   ];
 
   return (
@@ -75,25 +77,25 @@ const ProfitabilityCard = ({
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-3 h-3 rounded-full bg-[#10b981]"></div>
-                    <p className="text-muted-foreground text-sm">Adelanto</p>
+                    <p className="text-muted-foreground text-sm">Adelantado</p>
                   </div>
                   <p className="text-white text-xl font-bold ml-5">
-                    ${totalGastado.toLocaleString("es-CL")}
+                    ${montoAdelantado.toLocaleString("es-CL")}
                   </p>
                   <p className="text-muted-foreground text-xs ml-5">
-                    {porcentajeGastado.toFixed(1)}%
+                    {porcentajeCobrado.toFixed(1)}%
                   </p>
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-3 h-3 rounded-full bg-[#6366f1]"></div>
-                    <p className="text-muted-foreground text-sm">Por Ingresar</p>
+                    <p className="text-muted-foreground text-sm">Por Cobrar</p>
                   </div>
                   <p className="text-white text-xl font-bold ml-5">
-                    ${Math.max(0, porIngresar).toLocaleString("es-CL")}
+                    ${Math.max(0, porCobrar).toLocaleString("es-CL")}
                   </p>
                   <p className="text-muted-foreground text-xs ml-5">
-                    {porcentajePorIngresar.toFixed(1)}%
+                    {(100 - porcentajeCobrado).toFixed(1)}%
                   </p>
                 </div>
               </div>
@@ -101,11 +103,17 @@ const ProfitabilityCard = ({
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-4 mb-6">
           <div>
-            <p className="text-muted-foreground text-sm mb-1">Presupuestado</p>
+            <p className="text-muted-foreground text-sm mb-1">Valor Total</p>
             <p className="text-white text-2xl font-bold">
-              ${totalPresupuestado.toLocaleString("es-CL")}
+              ${montoTotal.toLocaleString("es-CL")}
+            </p>
+          </div>
+          <div>
+            <p className="text-muted-foreground text-sm mb-1">Adelantado</p>
+            <p className="text-white text-2xl font-bold">
+              ${montoAdelantado.toLocaleString("es-CL")}
             </p>
           </div>
           <div>
@@ -116,21 +124,42 @@ const ProfitabilityCard = ({
           </div>
         </div>
 
-        <div className="bg-dark-bg/50 rounded-xl p-4 border border-primary/30">
+        <div className="bg-dark-bg/50 rounded-xl p-4 border border-primary/30 mb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <DollarSign className="h-8 w-8 text-primary" />
               <div>
-                <p className="text-muted-foreground text-sm">GANANCIA NETA</p>
+                <p className="text-muted-foreground text-sm">GANANCIA NETA FINAL</p>
                 <p className={`text-4xl font-black ${
                   gananciaNeta >= 0 ? "text-primary" : "text-destructive"
                 }`}>
                   ${gananciaNeta.toLocaleString("es-CL")}
                 </p>
+                {montoTotal > 0 && (
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {((gananciaNeta / montoTotal) * 100).toFixed(1)}% de rentabilidad
+                  </p>
+                )}
               </div>
             </div>
           </div>
         </div>
+
+        {isNotCompleted && (
+          <div className="bg-dark-bg/30 rounded-xl p-4 border border-border">
+            <div className="flex items-center gap-2">
+              <DollarSign className="h-6 w-6 text-muted-foreground" />
+              <div>
+                <p className="text-muted-foreground text-sm">Ganancia Parcial (con adelanto)</p>
+                <p className={`text-2xl font-bold ${
+                  gananciaParcial >= 0 ? "text-green-500" : "text-destructive"
+                }`}>
+                  ${gananciaParcial.toLocaleString("es-CL")}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

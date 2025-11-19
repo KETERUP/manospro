@@ -8,13 +8,14 @@ import { Info } from "lucide-react";
 
 interface ProjectInfoProps {
   cliente: string;
+  descripcion?: string | null;
   estado: string;
   fechaVisita: string | null;
   projectId: string;
   onUpdate: () => void;
 }
 
-const ProjectInfo = ({ cliente, estado, fechaVisita, projectId, onUpdate }: ProjectInfoProps) => {
+const ProjectInfo = ({ cliente, descripcion, estado, fechaVisita, projectId, onUpdate }: ProjectInfoProps) => {
   const [updating, setUpdating] = useState(false);
 
   const handleEstadoChange = async (newEstado: string) => {
@@ -45,6 +46,13 @@ const ProjectInfo = ({ cliente, estado, fechaVisita, projectId, onUpdate }: Proj
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {descripcion && (
+          <div>
+            <Label className="text-muted-foreground">Indicaciones del Cliente</Label>
+            <p className="text-foreground font-normal mt-1">{descripcion}</p>
+          </div>
+        )}
+
         <div>
           <Label className="text-muted-foreground">Cliente</Label>
           <p className="text-foreground font-semibold">{cliente}</p>
