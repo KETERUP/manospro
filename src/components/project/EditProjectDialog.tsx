@@ -25,6 +25,10 @@ const projectSchema = z.object({
     .min(0, "El adelanto no puede ser negativo")
     .optional()
     .default(0),
+  totalGastado: z.number()
+    .min(0, "El total gastado no puede ser negativo")
+    .optional()
+    .default(0),
 }).refine(data => data.montoAdelantado <= data.montoTotal, {
   message: "El adelanto no puede ser mayor al monto total",
   path: ["montoAdelantado"],
@@ -45,6 +49,7 @@ interface EditProjectDialogProps {
     cliente_id?: string | null;
     monto_total: number;
     monto_adelantado: number;
+    total_gastado?: number;
   };
   onUpdate: () => void;
 }
@@ -55,8 +60,12 @@ const EditProjectDialog = ({ open, onOpenChange, projectId, currentData, onUpdat
   const [clienteId, setClienteId] = useState(currentData.cliente_id || "");
   const [montoTotal, setMontoTotal] = useState(currentData.monto_total.toString());
   const [montoAdelantado, setMontoAdelantado] = useState(currentData.monto_adelantado.toString());
+  const [totalGastado, setTotalGastado] = useState((currentData.total_gastado || 0).toString());
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // Calcular ganancia neta en tiempo real
+  const gananciaNeta = parseFloat(montoTotal || "0") - parseFloat(totalGastado || "0");
 
   useEffect(() => {
     if (open) {
@@ -67,6 +76,7 @@ const EditProjectDialog = ({ open, onOpenChange, projectId, currentData, onUpdat
       setClienteId(currentData.cliente_id || "");
       setMontoTotal(currentData.monto_total.toString());
       setMontoAdelantado(currentData.monto_adelantado.toString());
+      setTotalGastado((currentData.total_gastado || 0).toString());
     }
   }, [open, currentData]);
 
@@ -92,6 +102,7 @@ const EditProjectDialog = ({ open, onOpenChange, projectId, currentData, onUpdat
       descripcion: descripcion || undefined,
       montoTotal: parseFloat(montoTotal),
       montoAdelantado: parseFloat(montoAdelantado || "0"),
+      totalGastado: parseFloat(totalGastado || "0"),
     });
 
     if (!validationResult.success) {
@@ -111,6 +122,7 @@ const EditProjectDialog = ({ open, onOpenChange, projectId, currentData, onUpdat
           cliente_id: clienteId || null,
           monto_total: validationResult.data.montoTotal,
           monto_adelantado: validationResult.data.montoAdelantado,
+          total_gastado: validationResult.data.totalGastado,
         })
         .eq("id", projectId);
 
@@ -199,19 +211,39 @@ const EditProjectDialog = ({ open, onOpenChange, projectId, currentData, onUpdat
             />
           </div>
 
-          {montoTotal && parseFloat(montoTotal) > 0 && (
-            <div className="bg-muted p-3 rounded-lg">
-              <p className="text-sm font-medium text-foreground">
-                Por Cobrar: ${(parseFloat(montoTotal) - parseFloat(montoAdelantado || "0")).toLocaleString("es-CL")}
-              </p>
-            </div>
-          )}
-
-          <div className="bg-yellow-500/10 p-3 rounded-lg border border-yellow-500/30">
-            <p className="text-xs text-yellow-600 dark:text-yellow-500">
-              Nota: Los gastos y ganancia neta se calculan automáticamente según los gastos registrados.
+          <div className="space-y-2">
+            <Label htmlFor="totalGastado">Total Gastado</Label>
+            <Input
+              id="totalGastado"
+              type="number"
+              step="0.01"
+              min="0"
+              placeholder="0"
+              value={totalGastado}
+              onChange={(e) => setTotalGastado(e.target.value)}
+            />
+            <p className="text-xs text-muted-foreground">
+              Normalmente se calcula automáticamente de los gastos registrados
             </p>
           </div>
+
+          {montoTotal && parseFloat(montoTotal) > 0 && (
+            <div className="space-y-2">
+              <div className="bg-muted p-3 rounded-lg">
+                <p className="text-sm font-medium text-foreground">
+                  Por Cobrar: ${(parseFloat(montoTotal) - parseFloat(montoAdelantado || "0")).toLocaleString("es-CL")}
+                </p>
+              </div>
+              <div className={`p-3 rounded-lg ${gananciaNeta >= 0 ? 'bg-green-500/10 border border-green-500/30' : 'bg-red-500/10 border border-red-500/30'}`}>
+                <p className={`text-sm font-bold ${gananciaNeta >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                  Ganancia Neta: ${gananciaNeta.toLocaleString("es-CL")}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  = Presupuesto Total (${parseFloat(montoTotal).toLocaleString("es-CL")}) - Gastos (${parseFloat(totalGastado || "0").toLocaleString("es-CL")})
+                </p>
+              </div>
+            </div>
+          )}
 
           <Button
             type="submit"
