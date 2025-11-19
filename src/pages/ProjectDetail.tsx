@@ -28,10 +28,10 @@ interface ProjectData {
   descripcion: string | null;
   estado: string;
   fecha_visita: string | null;
-  monto_total: number;
-  monto_adelantado: number;
+  monto_total: number | null;
+  monto_adelantado: number | null;
   total_gastado: number;
-  ganancia_neta: number;
+  ganancia_neta: number | null;
   cliente_id: string | null;
   cliente: {
     nombre: string;
@@ -224,9 +224,9 @@ const ProjectDetail = () => {
           nombre_obra: project.nombre_obra,
           descripcion: project.descripcion,
           cliente_id: project.cliente_id,
-          monto_total: project.monto_total,
-          monto_adelantado: project.monto_adelantado,
-          total_gastado: project.total_gastado,
+          monto_total: project.monto_total || 0,
+          monto_adelantado: project.monto_adelantado || 0,
+          total_gastado: project.total_gastado || 0,
         }}
         onUpdate={fetchProject}
       />
