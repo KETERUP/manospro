@@ -58,10 +58,21 @@ const CreateClientDialog = ({ open, onOpenChange, onSuccess }: CreateClientDialo
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user logged in");
 
+      // Get user's empresa_id from profile
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('empresa_id')
+        .eq('id', user.id)
+        .single();
+
+      if (profileError) throw profileError;
+      if (!profile?.empresa_id) throw new Error("Usuario sin empresa asignada");
+
       const { error } = await supabase.from("clientes").insert({
         nombre: validationResult.data.nombre,
         telefono: validationResult.data.telefono || null,
         email: validationResult.data.email || null,
+        empresa_id: profile.empresa_id,
       });
 
       if (error) throw error;
