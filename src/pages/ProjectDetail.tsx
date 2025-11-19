@@ -3,8 +3,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Pencil } from "lucide-react";
+import { ArrowLeft, Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import ProfitabilityCard from "@/components/project/ProfitabilityCard";
 import ProjectInfo from "@/components/project/ProjectInfo";
 import BudgetItems from "@/components/project/BudgetItems";
@@ -36,6 +46,7 @@ const ProjectDetail = () => {
   const [loading, setLoading] = useState(true);
   const [showAddExpense, setShowAddExpense] = useState(false);
   const [showEditProject, setShowEditProject] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   // Check authentication
   useEffect(() => {
@@ -88,6 +99,25 @@ const ProjectDetail = () => {
     }
   }, [id, user]);
 
+  const handleDeleteProject = async () => {
+    if (!id) return;
+
+    try {
+      const { error } = await supabase
+        .from("obras")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+
+      toast.success("Proyecto eliminado exitosamente");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      toast.error("Error al eliminar el proyecto");
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -119,15 +149,26 @@ const ProjectDetail = () => {
                 {project.nombre_obra}
               </h1>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowEditProject(true)}
-              className="gap-2"
-            >
-              <Pencil className="h-4 w-4" />
-              Editar
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowEditProject(true)}
+                className="gap-2"
+              >
+                <Pencil className="h-4 w-4" />
+                Editar
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => setShowDeleteDialog(true)}
+                className="gap-2"
+              >
+                <Trash2 className="h-4 w-4" />
+                Eliminar
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -188,6 +229,27 @@ const ProjectDetail = () => {
         }}
         onUpdate={fetchProject}
       />
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar proyecto?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. Se eliminará permanentemente el proyecto
+              "{project.nombre_obra}" y todos sus datos asociados.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteProject}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
