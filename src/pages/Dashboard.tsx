@@ -18,9 +18,11 @@ import ClientsList from "@/components/dashboard/ClientsList";
 import ProvidersList from "@/components/dashboard/ProvidersList";
 import HeaderCalendar from "@/components/dashboard/HeaderCalendar";
 import { seedProjects } from "@/utils/seedProjects";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -83,38 +85,78 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-6 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <img src={logoIcon} alt="ManosPro Icon" className="h-20 w-20 object-contain" />
-              <div className="flex flex-col">
-                <h1 className="text-4xl font-bold leading-tight">
-                  <span className="text-primary">Manos</span>
-                  <span className="text-foreground">Pro</span>
-                </h1>
-                <div className="h-1 bg-gradient-to-r from-primary to-transparent rounded-full mt-1"></div>
+        <div className="container mx-auto px-4 md:px-6 py-4 md:py-6">
+          {isMobile ? (
+            /* Layout móvil: Logo arriba, calendario debajo a la derecha */
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <img src={logoIcon} alt="ManosPro Icon" className="h-14 w-14 object-contain" />
+                  <div className="flex flex-col">
+                    <h1 className="text-2xl font-bold leading-tight">
+                      <span className="text-primary">Manos</span>
+                      <span className="text-foreground">Pro</span>
+                    </h1>
+                    <div className="h-1 bg-gradient-to-r from-primary to-transparent rounded-full mt-1"></div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => navigate("/settings")}
+                    title="Configuración"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    onClick={handleLogout}
+                    title="Cerrar Sesión"
+                  >
+                    <LogOut className="h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
+              <div className="flex justify-end">
+                <HeaderCalendar />
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <HeaderCalendar />
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate("/settings")}
-                title="Configuración"
-              >
-                <Settings className="h-5 w-5" />
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={handleLogout}
-                className="gap-2"
-              >
-                <LogOut className="h-5 w-5" />
-                Cerrar Sesión
-              </Button>
+          ) : (
+            /* Layout desktop: Todo en una línea */
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <img src={logoIcon} alt="ManosPro Icon" className="h-20 w-20 object-contain" />
+                <div className="flex flex-col">
+                  <h1 className="text-4xl font-bold leading-tight">
+                    <span className="text-primary">Manos</span>
+                    <span className="text-foreground">Pro</span>
+                  </h1>
+                  <div className="h-1 bg-gradient-to-r from-primary to-transparent rounded-full mt-1"></div>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <HeaderCalendar />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => navigate("/settings")}
+                  title="Configuración"
+                >
+                  <Settings className="h-5 w-5" />
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={handleLogout}
+                  className="gap-2"
+                >
+                  <LogOut className="h-5 w-5" />
+                  Cerrar Sesión
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </header>
 
