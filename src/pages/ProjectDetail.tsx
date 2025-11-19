@@ -3,13 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Plus, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import ProfitabilityCard from "@/components/project/ProfitabilityCard";
 import ProjectInfo from "@/components/project/ProjectInfo";
 import BudgetItems from "@/components/project/BudgetItems";
 import ExpensesList from "@/components/project/ExpensesList";
 import AddExpenseDialog from "@/components/project/AddExpenseDialog";
+import EditProjectDialog from "@/components/project/EditProjectDialog";
 
 interface ProjectData {
   id: string;
@@ -21,6 +22,7 @@ interface ProjectData {
   monto_adelantado: number;
   total_gastado: number;
   ganancia_neta: number;
+  cliente_id: string | null;
   cliente: {
     nombre: string;
   } | null;
@@ -33,6 +35,7 @@ const ProjectDetail = () => {
   const [project, setProject] = useState<ProjectData | null>(null);
   const [loading, setLoading] = useState(true);
   const [showAddExpense, setShowAddExpense] = useState(false);
+  const [showEditProject, setShowEditProject] = useState(false);
 
   // Check authentication
   useEffect(() => {
@@ -116,6 +119,15 @@ const ProjectDetail = () => {
                 {project.nombre_obra}
               </h1>
             </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowEditProject(true)}
+              className="gap-2"
+            >
+              <Pencil className="h-4 w-4" />
+              Editar
+            </Button>
           </div>
         </div>
       </header>
@@ -161,6 +173,20 @@ const ProjectDetail = () => {
         onOpenChange={setShowAddExpense}
         projectId={project.id}
         onSuccess={fetchProject}
+      />
+
+      <EditProjectDialog
+        open={showEditProject}
+        onOpenChange={setShowEditProject}
+        projectId={project.id}
+        currentData={{
+          nombre_obra: project.nombre_obra,
+          descripcion: project.descripcion,
+          cliente_id: project.cliente_id,
+          monto_total: project.monto_total,
+          monto_adelantado: project.monto_adelantado,
+        }}
+        onUpdate={fetchProject}
       />
     </div>
   );
