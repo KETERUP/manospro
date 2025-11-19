@@ -156,9 +156,14 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
 
       const { error } = await supabase.from("obras").insert({
         nombre_obra: validationResult.data.nombreObra,
+        descripcion: validationResult.data.descripcion || null,
         cliente_id: clienteId || null,
         empresa_id: profile.empresa_id,
+        monto_total: validationResult.data.montoTotal,
+        monto_adelantado: validationResult.data.montoAdelantado,
+        total_gastado: 0,
         imagen_proyecto: imagenUrl,
+        estado: "PENDIENTE",
       });
 
       if (error) throw error;
