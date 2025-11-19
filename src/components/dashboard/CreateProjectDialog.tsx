@@ -104,6 +104,16 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user logged in");
 
+      // Get user's empresa_id from profile
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('empresa_id')
+        .eq('id', user.id)
+        .single();
+
+      if (profileError) throw profileError;
+      if (!profile?.empresa_id) throw new Error("Usuario sin empresa asignada");
+
       let imagenUrl = null;
 
       // Upload image if provided
@@ -127,7 +137,7 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
       const { error } = await supabase.from("obras").insert({
         nombre_obra: validationResult.data.nombreObra,
         cliente_id: clienteId || null,
-        user_id: user.id,
+        empresa_id: profile.empresa_id,
         imagen_proyecto: imagenUrl,
       });
 
