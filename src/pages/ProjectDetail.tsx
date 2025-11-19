@@ -226,6 +226,7 @@ const ProjectDetail = () => {
           cliente_id: project.cliente_id,
           monto_total: project.monto_total,
           monto_adelantado: project.monto_adelantado,
+          total_gastado: project.total_gastado,
         }}
         onUpdate={fetchProject}
       />
