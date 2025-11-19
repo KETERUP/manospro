@@ -44,6 +44,44 @@ const Register = () => {
 
       if (error) throw error;
 
+      // Obtener el usuario recién creado
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No se pudo obtener el usuario");
+
+      // Crear empresa por defecto para el usuario
+      const { data: empresaCreada, error: empresaError } = await supabase
+        .from("empresas")
+        .insert({
+          nombre: `Empresa de ${nombreCompleto}`,
+          cif: "TEMP-" + Date.now(),
+          direccion_fiscal: "Por definir",
+          email: email,
+          telefono: "Por definir",
+        })
+        .select("id")
+        .single();
+
+      if (empresaError) throw empresaError;
+
+      // Actualizar perfil con empresa_id
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .update({ empresa_id: empresaCreada.id })
+        .eq("id", user.id);
+
+      if (profileError) throw profileError;
+
+      // Asignar rol admin automáticamente
+      const { error: roleError } = await supabase
+        .from("user_roles")
+        .insert({
+          user_id: user.id,
+          empresa_id: empresaCreada.id,
+          role: "admin",
+        });
+
+      if (roleError) throw roleError;
+
       toast.success("¡Cuenta creada exitosamente!");
       navigate("/dashboard");
     } catch (error: any) {
