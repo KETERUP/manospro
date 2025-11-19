@@ -15,6 +15,20 @@ const projectSchema = z.object({
     .trim()
     .min(1, "El nombre de la obra es requerido")
     .max(100, "El nombre no puede exceder 100 caracteres"),
+  descripcion: z.string()
+    .trim()
+    .max(500, "La descripción no puede exceder 500 caracteres")
+    .optional(),
+  montoTotal: z.number()
+    .positive("El monto total debe ser mayor a 0")
+    .min(0.01, "El monto total es requerido"),
+  montoAdelantado: z.number()
+    .min(0, "El adelanto no puede ser negativo")
+    .optional()
+    .default(0),
+}).refine(data => data.montoAdelantado <= data.montoTotal, {
+  message: "El adelanto no puede ser mayor al monto total",
+  path: ["montoAdelantado"],
 });
 
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -32,7 +46,10 @@ interface CreateProjectDialogProps {
 
 const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) => {
   const [nombreObra, setNombreObra] = useState("");
+  const [descripcion, setDescripcion] = useState("");
   const [clienteId, setClienteId] = useState("");
+  const [montoTotal, setMontoTotal] = useState("");
+  const [montoAdelantado, setMontoAdelantado] = useState("");
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(false);
   const [showCreateClient, setShowCreateClient] = useState(false);
@@ -90,6 +107,9 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
 
     const validationResult = projectSchema.safeParse({
       nombreObra,
+      descripcion: descripcion || undefined,
+      montoTotal: parseFloat(montoTotal),
+      montoAdelantado: parseFloat(montoAdelantado || "0"),
     });
 
     if (!validationResult.success) {
@@ -145,7 +165,10 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
 
       toast.success("Proyecto creado exitosamente");
       setNombreObra("");
+      setDescripcion("");
       setClienteId("");
+      setMontoTotal("");
+      setMontoAdelantado("");
       setImagenProyecto(null);
       setImagePreview("");
       onOpenChange(false);
@@ -204,6 +227,51 @@ const CreateProjectDialog = ({ open, onOpenChange }: CreateProjectDialogProps) =
                 </SelectContent>
               </Select>
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="descripcion">Indicaciones del Cliente</Label>
+              <Input
+                id="descripcion"
+                placeholder="Detalles del proyecto, requerimientos específicos..."
+                value={descripcion}
+                onChange={(e) => setDescripcion(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="montoTotal">Valor Total del Proyecto *</Label>
+              <Input
+                id="montoTotal"
+                type="number"
+                step="0.01"
+                min="0"
+                placeholder="1000000"
+                value={montoTotal}
+                onChange={(e) => setMontoTotal(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="montoAdelantado">Adelanto (Ya Pagado)</Label>
+              <Input
+                id="montoAdelantado"
+                type="number"
+                step="0.01"
+                min="0"
+                placeholder="200000"
+                value={montoAdelantado}
+                onChange={(e) => setMontoAdelantado(e.target.value)}
+              />
+            </div>
+
+            {montoTotal && parseFloat(montoTotal) > 0 && (
+              <div className="bg-muted p-3 rounded-lg">
+                <p className="text-sm font-medium text-foreground">
+                  Por Cobrar: ${(parseFloat(montoTotal) - parseFloat(montoAdelantado || "0")).toLocaleString("es-CL")}
+                </p>
+              </div>
+            )}
 
             <div className="space-y-2">
               <Label htmlFor="imagen">Imagen del Proyecto (opcional)</Label>
