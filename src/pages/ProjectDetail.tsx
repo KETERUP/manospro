@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import ProfitabilityCard from "@/components/project/ProfitabilityCard";
 import ProjectInfo from "@/components/project/ProjectInfo";
-import BudgetItems from "@/components/project/BudgetItems";
 import ExpensesList from "@/components/project/ExpensesList";
 import AddExpenseDialog from "@/components/project/AddExpenseDialog";
 import EditProjectDialog from "@/components/project/EditProjectDialog";
@@ -192,9 +191,6 @@ const ProjectDetail = () => {
           projectId={project.id}
           onUpdate={fetchProject}
         />
-
-        {/* Budget Items */}
-        <BudgetItems projectId={project.id} />
 
         {/* Expenses */}
         <ExpensesList projectId={project.id} />
