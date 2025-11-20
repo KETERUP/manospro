@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import ProfitabilityCard from "@/components/project/ProfitabilityCard";
 import ProjectInfo from "@/components/project/ProjectInfo";
+import ProjectMeetingCard from "@/components/project/ProjectMeetingCard";
 import ExpensesList from "@/components/project/ExpensesList";
 import AddExpenseDialog from "@/components/project/AddExpenseDialog";
 import EditProjectDialog from "@/components/project/EditProjectDialog";
@@ -190,6 +191,13 @@ const ProjectDetail = () => {
           fechaVisita={project.fecha_visita}
           projectId={project.id}
           onUpdate={fetchProject}
+        />
+
+        {/* Meeting */}
+        <ProjectMeetingCard
+          projectId={project.id}
+          projectName={project.nombre_obra}
+          clientId={project.cliente_id}
         />
 
         {/* Expenses */}
