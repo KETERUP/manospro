@@ -33,11 +33,20 @@ const CreateProviderDialog = ({ open, onOpenChange, onSuccess }: CreateProviderD
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user logged in");
 
+      // Obtener empresa_id del usuario
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("empresa_id")
+        .eq("id", user.id)
+        .single();
+
+      if (!profile?.empresa_id) throw new Error("No se encontró la empresa del usuario");
+
       const { error } = await supabase.from("proveedores").insert({
         nombre,
         telefono: telefono || null,
         email: email || null,
-        user_id: user.id,
+        empresa_id: profile.empresa_id,
       });
 
       if (error) throw error;
