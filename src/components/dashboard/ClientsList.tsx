@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, MapPin, FileText, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import EditClientDialog from "./EditClientDialog";
 
 interface Cliente {
   id: string;
@@ -21,6 +22,8 @@ interface ClientsListProps {
 const ClientsList = ({ searchQuery }: ClientsListProps) => {
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingCliente, setEditingCliente] = useState<Cliente | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const fetchClientes = async () => {
     try {
@@ -48,6 +51,11 @@ const ClientsList = ({ searchQuery }: ClientsListProps) => {
     cliente.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     cliente.telefono?.includes(searchQuery)
   );
+
+  const handleEdit = (cliente: Cliente) => {
+    setEditingCliente(cliente);
+    setEditDialogOpen(true);
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("¿Estás seguro de eliminar este cliente?")) return;
@@ -86,20 +94,29 @@ const ClientsList = ({ searchQuery }: ClientsListProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-      {filteredClientes.map((cliente) => (
-        <Card key={cliente.id} className="hover:shadow-lg transition-shadow">
-          <CardContent className="p-4">
-            <div className="flex justify-between items-start mb-3">
-              <h3 className="font-bold text-base text-foreground line-clamp-1">{cliente.nombre}</h3>
-              <div className="flex gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7 text-muted-foreground hover:text-primary"
-                >
-                  <Pencil className="h-3.5 w-3.5" />
-                </Button>
+    <>
+      <EditClientDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        cliente={editingCliente}
+        onSuccess={fetchClientes}
+      />
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        {filteredClientes.map((cliente) => (
+          <Card key={cliente.id} className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-4">
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="font-bold text-base text-foreground line-clamp-1">{cliente.nombre}</h3>
+                <div className="flex gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 text-muted-foreground hover:text-primary"
+                    onClick={() => handleEdit(cliente)}
+                  >
+                    <Pencil className="h-3.5 w-3.5" />
+                  </Button>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -140,7 +157,8 @@ const ClientsList = ({ searchQuery }: ClientsListProps) => {
           </CardContent>
         </Card>
       ))}
-    </div>
+      </div>
+    </>
   );
 };
 
